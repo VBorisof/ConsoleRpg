@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ConsoleRpg_2.Extensions;
 
 namespace ConsoleRpg_2
 {
@@ -28,15 +29,15 @@ namespace ConsoleRpg_2
             var decisionKey = Console.ReadKey(intercept: true);
             int.TryParse(decisionKey.KeyChar.ToString(), out var decisionIndex);
                                             
-            while (decisionKey.Key != ConsoleKey.Escape && !dict.ContainsKey(decisionIndex))
+            while (decisionKey.Key != ConsoleKey.Q && !dict.ContainsKey(decisionIndex))
             {
-                Console.WriteLine("Wrong input. Try again or use <ESC> to abort.");
+                Console.WriteLine("Wrong input. Try again or use <q> to abort.");
                         
                 decisionKey = Console.ReadKey(intercept: true);
                 int.TryParse(decisionKey.KeyChar.ToString(), out decisionIndex);
             }
 
-            if (decisionKey.Key == ConsoleKey.Escape)
+            if (decisionKey.Key == ConsoleKey.Q)
             {
                 return;
             }
@@ -48,35 +49,45 @@ namespace ConsoleRpg_2
         {
             Console.Clear();
                     
-            Console.WriteLine($"Press `?` for help.");
-            Console.WriteLine($"== Game ======================================");
-            Console.WriteLine($"You are in {_currentCharacter.Name}");
-            Console.WriteLine($"This is {_currentScene.Description}");
-            Console.WriteLine($"______________________________________________");
+            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.DarkGray);
+            ConsoleEx.WriteLine($"== Game ======================================", ConsoleColor.Green);
+            Console.WriteLine();
+            ConsoleEx.WriteLine($"You are in {_currentCharacter.Name}", ConsoleColor.White);
+            ConsoleEx.WriteLine($"This is {_currentScene.Description}", ConsoleColor.Gray);
+            Console.WriteLine();
+            ConsoleEx.WriteLine($"______________________________________________", ConsoleColor.Green);
         }
         
         private void PrintStatScreen()
         {
             Console.Clear();
                     
-            Console.WriteLine($"Press `?` for help.");
-            Console.WriteLine($"== Stats =====================================");                    
+            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.DarkGray);
+            ConsoleEx.WriteLine($"== Stats =====================================", ConsoleColor.Green);                    
 
+            Console.WriteLine();
+            
             Console.WriteLine($"{_currentCharacter.Name} -- Level {_currentCharacter.Stats.Level}");
             Console.WriteLine($"{_currentCharacter.Stats.Race} {_currentCharacter.Stats.Gender}");
             
-            Console.WriteLine($"{_currentCharacter.Stats.Health}/{_currentCharacter.Stats.MaxHealth}");
-            Console.WriteLine($"{_currentCharacter.Stats.Mana}/{_currentCharacter.Stats.MaxMana}");
-            Console.WriteLine($"{_currentCharacter.Stats.ActionPoints}/{_currentCharacter.Stats.MaxActionPoints}");
-
-            Console.WriteLine($"Strength     : {_currentCharacter.Stats.Strength }");
-            Console.WriteLine($"Perception   : {_currentCharacter.Stats.Perception }");
-            Console.WriteLine($"Stamina      : {_currentCharacter.Stats.Stamina }");
-            Console.WriteLine($"Charisma     : {_currentCharacter.Stats.Charisma }");
-            Console.WriteLine($"Intelligence : {_currentCharacter.Stats.Intelligence }");
-            Console.WriteLine($"Agility      : {_currentCharacter.Stats.Agility }");
+            Console.WriteLine();
             
-            Console.WriteLine($"______________________________________________");
+            ConsoleEx.Write($"HP : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Health}/{_currentCharacter.Stats.MaxHealth}", ConsoleColor.White);
+            ConsoleEx.Write($"MP : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Mana}/{_currentCharacter.Stats.MaxMana}", ConsoleColor.White);
+            ConsoleEx.Write($"AP : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.ActionPoints}/{_currentCharacter.Stats.MaxActionPoints}", ConsoleColor.White);
+
+            Console.WriteLine();
+            
+            ConsoleEx.Write($"Strength     : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Strength }", ConsoleColor.White);
+            ConsoleEx.Write($"Perception   : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Perception }", ConsoleColor.White);
+            ConsoleEx.Write($"Stamina      : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Stamina }", ConsoleColor.White);
+            ConsoleEx.Write($"Charisma     : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Charisma }", ConsoleColor.White);
+            ConsoleEx.Write($"Intelligence : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Intelligence }", ConsoleColor.White);
+            ConsoleEx.Write($"Agility      : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Agility }", ConsoleColor.White);
+            
+            Console.WriteLine();
+            
+            Console.WriteLine($"______________________________________________", ConsoleColor.Green);
         }
 
         private void HelpScreen()
@@ -190,6 +201,7 @@ namespace ConsoleRpg_2
                         case GameState.Inventory:
                             break;
                         case GameState.Stats:
+                            PrintStatScreen();
                             break;
                     }
 
@@ -198,15 +210,33 @@ namespace ConsoleRpg_2
                 
                 key = Console.ReadKey(intercept: true);
 
-                if (key.Key == ConsoleKey.L)
+                
+                switch (_currentState)
                 {
-                    ProcessLookAt();
+                    case GameState.Playing:
+                        if (key.Key == ConsoleKey.L)
+                        {
+                            ProcessLookAt();
+                        }
+                        if (key.Key == ConsoleKey.P)
+                        {
+                            _currentState = GameState.Stats;
+                            refreshFlag = true;
+                        }
+                        break;
+                    
+                    case GameState.Inventory:
+                        break;
+                    
+                    case GameState.Stats:
+                        if (key.Key == ConsoleKey.Q)
+                        {
+                            _currentState = GameState.Playing;
+                            refreshFlag = true;
+                        }                        
+                        break;
                 }
                 
-                if (key.Key == ConsoleKey.P)
-                {
-                    ProcessLookAt();
-                }
             } 
             while (key.Key != ConsoleKey.X);
             
