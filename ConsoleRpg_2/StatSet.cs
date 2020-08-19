@@ -14,11 +14,22 @@
         public int MaxMana { get; set; }
         public int MaxActionPoints { get; set; }
 
+        public int AvailableBaseSkillPoints { get; set; }
+
         public int Strength { get; set; }
         public int Perception { get; set; }
         public int Stamina { get; set; }
         public int Charisma { get; set; }
         public int Intelligence { get; set; }
         public int Agility { get; set; }
+        
+        public int AvailableSkillPoints { get; set; }
+
+        public int Speech { get; set; }
+        public int Lockpick { get; set; }
+        public int Meelee { get; set; }
+        public int Magic { get; set; }
+        public int Sneak { get; set; }
+        public int Repair { get; set; }        
     }
 }

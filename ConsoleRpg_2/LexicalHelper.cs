@@ -49,7 +49,7 @@ namespace ConsoleRpg_2
                 },
             };
 
-            var pair = dict.First(p => p.Key < value);
+            var pair = dict.First(p => p.Key <= value);
 
             return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
         }
@@ -94,7 +94,7 @@ namespace ConsoleRpg_2
                 },
             };
 
-            var pair = dict.First(p => p.Key < value);
+            var pair = dict.First(p => p.Key <= value);
 
             return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
         }
@@ -125,7 +125,7 @@ namespace ConsoleRpg_2
                 },
             };
 
-            var pair = dict.First(p => p.Key < value);
+            var pair = dict.First(p => p.Key <= value);
 
             return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));        
         }
@@ -170,7 +170,7 @@ namespace ConsoleRpg_2
                 },
             };
 
-            var pair = dict.First(p => p.Key < value);
+            var pair = dict.First(p => p.Key <= value);
 
             return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
         }
@@ -215,7 +215,7 @@ namespace ConsoleRpg_2
                 },
             };
 
-            var pair = dict.First(p => p.Key < value);
+            var pair = dict.First(p => p.Key <= value);
 
             return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
         }
@@ -261,7 +261,7 @@ namespace ConsoleRpg_2
                 },
             };
 
-            var pair = dict.First(p => p.Key < value);
+            var pair = dict.First(p => p.Key <= value);
 
             return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
         }

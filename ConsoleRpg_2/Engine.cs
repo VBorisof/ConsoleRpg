@@ -4,98 +4,14 @@ using ConsoleRpg_2.Extensions;
 
 namespace ConsoleRpg_2
 {
-    public enum GameState
-    {
-        Playing,
-        Inventory,
-        Stats
-    }
-    
     public class Engine
     {
+        private readonly StatScreen _statScreen;
         private Character _currentCharacter;
         private Scene _currentScene;
         private GameState _currentState;
-        
-        private void ProcessLookAt()
-        {
-            Console.WriteLine("Look at...");
-            var dict = _currentScene.GetObjectDict();
-            foreach (var obj in dict)
-            {
-                Console.WriteLine($"{obj.Key} : {obj.Value.Name}");
-            }
 
-            var decisionKey = Console.ReadKey(intercept: true);
-            int.TryParse(decisionKey.KeyChar.ToString(), out var decisionIndex);
-                                            
-            while (decisionKey.Key != ConsoleKey.Q && !dict.ContainsKey(decisionIndex))
-            {
-                Console.WriteLine("Wrong input. Try again or use <q> to abort.");
-                        
-                decisionKey = Console.ReadKey(intercept: true);
-                int.TryParse(decisionKey.KeyChar.ToString(), out decisionIndex);
-            }
-
-            if (decisionKey.Key == ConsoleKey.Q)
-            {
-                return;
-            }
-                    
-            Console.WriteLine(_currentCharacter.Inspect(dict[decisionIndex]).Response);
-        }
-
-        private void PrintGameScreen()
-        {
-            Console.Clear();
-                    
-            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.DarkGray);
-            ConsoleEx.WriteLine($"== Game ======================================", ConsoleColor.Green);
-            Console.WriteLine();
-            ConsoleEx.WriteLine($"You are in {_currentCharacter.Name}", ConsoleColor.White);
-            ConsoleEx.WriteLine($"This is {_currentScene.Description}", ConsoleColor.Gray);
-            Console.WriteLine();
-            ConsoleEx.WriteLine($"______________________________________________", ConsoleColor.Green);
-        }
-        
-        private void PrintStatScreen()
-        {
-            Console.Clear();
-                    
-            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.DarkGray);
-            ConsoleEx.WriteLine($"== Stats =====================================", ConsoleColor.Green);                    
-
-            Console.WriteLine();
-            
-            Console.WriteLine($"{_currentCharacter.Name} -- Level {_currentCharacter.Stats.Level}");
-            Console.WriteLine($"{_currentCharacter.Stats.Race} {_currentCharacter.Stats.Gender}");
-            
-            Console.WriteLine();
-            
-            ConsoleEx.Write($"HP : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Health}/{_currentCharacter.Stats.MaxHealth}", ConsoleColor.White);
-            ConsoleEx.Write($"MP : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Mana}/{_currentCharacter.Stats.MaxMana}", ConsoleColor.White);
-            ConsoleEx.Write($"AP : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.ActionPoints}/{_currentCharacter.Stats.MaxActionPoints}", ConsoleColor.White);
-
-            Console.WriteLine();
-            
-            ConsoleEx.Write($"Strength     : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Strength }", ConsoleColor.White);
-            ConsoleEx.Write($"Perception   : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Perception }", ConsoleColor.White);
-            ConsoleEx.Write($"Stamina      : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Stamina }", ConsoleColor.White);
-            ConsoleEx.Write($"Charisma     : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Charisma }", ConsoleColor.White);
-            ConsoleEx.Write($"Intelligence : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Intelligence }", ConsoleColor.White);
-            ConsoleEx.Write($"Agility      : ", ConsoleColor.Gray); ConsoleEx.WriteLine($"{_currentCharacter.Stats.Agility }", ConsoleColor.White);
-            
-            Console.WriteLine();
-            
-            Console.WriteLine($"______________________________________________", ConsoleColor.Green);
-        }
-
-        private void HelpScreen()
-        {
-            
-        }
-        
-        public void Run()
+        public Engine()
         {
             var orc = new Character
             {
@@ -154,9 +70,10 @@ namespace ConsoleRpg_2
                     Health = 150,
                     Mana = 50,
                     ActionPoints = 6,
-                    MaxHealth = 400,
+                    MaxHealth = 150,
                     MaxMana = 50,
                     MaxActionPoints = 6,
+                    AvailableBaseSkillPoints = 50,
                     Strength = 5,
                     Perception = 5,
                     Stamina = 5,
@@ -185,6 +102,58 @@ namespace ConsoleRpg_2
 
             _currentState = GameState.Playing;
             
+            _statScreen = new StatScreen(_currentCharacter);
+        }
+        
+        
+        private void ProcessLookAt()
+        {
+            Console.WriteLine("Look at...");
+            var dict = _currentScene.GetObjectDict();
+            foreach (var obj in dict)
+            {
+                Console.WriteLine($"{obj.Key} : {obj.Value.Name}");
+            }
+
+            var decisionKey = Console.ReadKey(intercept: true);
+            int.TryParse(decisionKey.KeyChar.ToString(), out var decisionIndex);
+                                            
+            while (decisionKey.Key != ConsoleKey.Q && !dict.ContainsKey(decisionIndex))
+            {
+                Console.WriteLine("Wrong input. Try again or use <q> to abort.");
+                        
+                decisionKey = Console.ReadKey(intercept: true);
+                int.TryParse(decisionKey.KeyChar.ToString(), out decisionIndex);
+            }
+
+            if (decisionKey.Key == ConsoleKey.Q)
+            {
+                return;
+            }
+                    
+            Console.WriteLine(_currentCharacter.Inspect(dict[decisionIndex]).Response);
+        }
+
+        private void PrintGameScreen()
+        {
+            Console.Clear();
+                    
+            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.DarkGray);
+            ConsoleEx.WriteLine($"== Game ======================================", ConsoleColor.Green);
+            Console.WriteLine();
+            ConsoleEx.WriteLine($"You are in {_currentScene.Name}", ConsoleColor.White);
+            ConsoleEx.WriteLine($"This is {_currentScene.Description}", ConsoleColor.Gray);
+            Console.WriteLine();
+            ConsoleEx.WriteLine($"______________________________________________", ConsoleColor.Green);
+        }
+
+        private void HelpScreen()
+        {
+            
+        }
+        
+        public void Run()
+        {
             ConsoleKeyInfo key;
             bool refreshFlag = true;
             do
@@ -201,7 +170,7 @@ namespace ConsoleRpg_2
                         case GameState.Inventory:
                             break;
                         case GameState.Stats:
-                            PrintStatScreen();
+                            _statScreen.Render();
                             break;
                     }
 
@@ -233,7 +202,30 @@ namespace ConsoleRpg_2
                         {
                             _currentState = GameState.Playing;
                             refreshFlag = true;
-                        }                        
+                        }
+
+                        if (key.Key == ConsoleKey.UpArrow)
+                        {
+                            _statScreen.PrevItem();
+                            refreshFlag = true;
+                        }
+                        if (key.Key == ConsoleKey.DownArrow)
+                        {
+                            _statScreen.NextItem();
+                            refreshFlag = true;
+                        }
+                        if (key.Key == ConsoleKey.LeftArrow)
+                        {
+                            _statScreen.AdjustBaseSkillValue(-1);
+                            refreshFlag = true;
+                        }
+                        if (key.Key == ConsoleKey.RightArrow)
+                        {
+                            _statScreen.AdjustBaseSkillValue(1);
+                            refreshFlag = true;
+                        }
+                        
+                        _statScreen.Update();
                         break;
                 }
                 
