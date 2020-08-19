@@ -225,5 +225,39 @@ namespace ConsoleRpg_2
             
             Console.WriteLine($"______________________________________________", ConsoleColor.Green);
         }
+
+        public ScreenInputProcessResult ProcessInput(ConsoleKey key)
+        {
+            var result = new ScreenInputProcessResult();
+            
+            if (key == ConsoleKey.Q)
+            {
+                result.SwitchState = GameState.Playing;
+                result.RefreshFlag = true;
+            }
+
+            if (key == ConsoleKey.UpArrow)
+            {
+                PrevItem();
+                result.RefreshFlag = true;
+            }
+            if (key == ConsoleKey.DownArrow)
+            {
+                NextItem();
+                result.RefreshFlag = true;
+            }
+            if (key == ConsoleKey.LeftArrow)
+            {
+                AdjustBaseSkillValue(-1);
+                result.RefreshFlag = true;
+            }
+            if (key == ConsoleKey.RightArrow)
+            {
+                AdjustBaseSkillValue(1);
+                result.RefreshFlag = true;
+            }
+
+            return result;
+        }
     }
 }

@@ -198,33 +198,12 @@ namespace ConsoleRpg_2
                         break;
                     
                     case GameState.Stats:
-                        if (key.Key == ConsoleKey.Q)
+                        var processResult = _statScreen.ProcessInput(key.Key);
+                        refreshFlag = processResult.RefreshFlag;
+                        if (processResult.SwitchState != null)
                         {
-                            _currentState = GameState.Playing;
-                            refreshFlag = true;
+                            _currentState = processResult.SwitchState.Value;
                         }
-
-                        if (key.Key == ConsoleKey.UpArrow)
-                        {
-                            _statScreen.PrevItem();
-                            refreshFlag = true;
-                        }
-                        if (key.Key == ConsoleKey.DownArrow)
-                        {
-                            _statScreen.NextItem();
-                            refreshFlag = true;
-                        }
-                        if (key.Key == ConsoleKey.LeftArrow)
-                        {
-                            _statScreen.AdjustBaseSkillValue(-1);
-                            refreshFlag = true;
-                        }
-                        if (key.Key == ConsoleKey.RightArrow)
-                        {
-                            _statScreen.AdjustBaseSkillValue(1);
-                            refreshFlag = true;
-                        }
-                        
                         _statScreen.Update();
                         break;
                 }
