@@ -199,8 +199,7 @@ namespace ConsoleRpg_2.Ui
         public void Render()
         {
             Console.Clear();
-                    
-            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.DarkGray);
+            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.Gray);
             ConsoleEx.WriteLine($"== Stats =====================================", ConsoleColor.Green);                    
 
             Console.WriteLine();
@@ -232,31 +231,28 @@ namespace ConsoleRpg_2.Ui
         {
             var result = new ScreenInputProcessResult();
             
-            if (key == ConsoleKey.Q)
+            switch (key)
             {
-                result.SwitchState = GameState.Playing;
-                result.RefreshFlag = true;
-            }
-
-            if (key == ConsoleKey.UpArrow)
-            {
-                PrevItem();
-                result.RefreshFlag = true;
-            }
-            if (key == ConsoleKey.DownArrow)
-            {
-                NextItem();
-                result.RefreshFlag = true;
-            }
-            if (key == ConsoleKey.LeftArrow)
-            {
-                AdjustBaseSkillValue(-1);
-                result.RefreshFlag = true;
-            }
-            if (key == ConsoleKey.RightArrow)
-            {
-                AdjustBaseSkillValue(1);
-                result.RefreshFlag = true;
+                case ConsoleKey.Q:
+                    result.SwitchState = GameState.Playing;
+                    result.RefreshFlag = true;
+                    break;
+                case ConsoleKey.UpArrow:
+                    PrevItem();
+                    result.RefreshFlag = true;
+                    break;
+                case ConsoleKey.DownArrow:
+                    NextItem();
+                    result.RefreshFlag = true;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    AdjustBaseSkillValue(-1);
+                    result.RefreshFlag = true;
+                    break;
+                case ConsoleKey.RightArrow:
+                    AdjustBaseSkillValue(1);
+                    result.RefreshFlag = true;
+                    break;
             }
 
             return result;

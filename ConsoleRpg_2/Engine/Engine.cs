@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ConsoleRpg_2.Extensions;
 using ConsoleRpg_2.GameObjects;
 using ConsoleRpg_2.GameObjects.Character;
 using ConsoleRpg_2.Ui;
@@ -11,15 +10,16 @@ namespace ConsoleRpg_2.Engine
     {
         private readonly StatScreen _statScreen;
         private Character _currentCharacter;
-        private Scene _currentScene;
         private GameState _currentState;
+        private GameScreen _gameScreen;
 
         public Engine()
         {
             var orc = new Character
             {
                 Name = "Ogrem",
-                CurrentAction = "Nothing",
+                CurrentAction = "Doing nothing",
+                DefaultAttitude = Attitude.Neutral,
                 Inventory = new Inventory
                 {
                     Items = new List<Item>
@@ -58,7 +58,8 @@ namespace ConsoleRpg_2.Engine
             var player = new Character
             {
                 Name = "Player",
-                CurrentAction = "Nothing",
+                CurrentAction = "nothing",
+                DefaultAttitude = Attitude.Neutral,
                 Inventory = new Inventory
                 {
                     Items = new List<Item>
@@ -101,58 +102,19 @@ namespace ConsoleRpg_2.Engine
                 Decorations = new List<Decoration>()
             };
 
-            _currentScene = scene;
-
+            scene.InitializeScene();
+            _currentCharacter.CurrentScene = scene;
+            
             _currentState = GameState.Playing;
             
+            _gameScreen = new GameScreen(_currentCharacter);
             _statScreen = new StatScreen(_currentCharacter);
         }
         
-        
-        private void ProcessLookAt()
-        {
-            Console.WriteLine("Look at...");
-            var dict = _currentScene.GetObjectDict();
-            foreach (var obj in dict)
-            {
-                Console.WriteLine($"{obj.Key} : {obj.Value.Name}");
-            }
-
-            var decisionKey = Console.ReadKey(intercept: true);
-            int.TryParse(decisionKey.KeyChar.ToString(), out var decisionIndex);
-                                            
-            while (decisionKey.Key != ConsoleKey.Q && !dict.ContainsKey(decisionIndex))
-            {
-                Console.WriteLine("Wrong input. Try again or use <q> to abort.");
-                        
-                decisionKey = Console.ReadKey(intercept: true);
-                int.TryParse(decisionKey.KeyChar.ToString(), out decisionIndex);
-            }
-
-            if (decisionKey.Key == ConsoleKey.Q)
-            {
-                return;
-            }
-                    
-            Console.WriteLine(_currentCharacter.Inspect(dict[decisionIndex]).Response);
-        }
-
-        private void PrintGameScreen()
-        {
-            Console.Clear();
-                    
-            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.DarkGray);
-            ConsoleEx.WriteLine($"== Game ======================================", ConsoleColor.Green);
-            Console.WriteLine();
-            ConsoleEx.WriteLine($"You are in {_currentScene.Name}", ConsoleColor.White);
-            ConsoleEx.WriteLine($"This is {_currentScene.Description}", ConsoleColor.Gray);
-            Console.WriteLine();
-            ConsoleEx.WriteLine($"______________________________________________", ConsoleColor.Green);
-        }
 
         private void HelpScreen()
         {
-            
+            Console.Clear();
         }
         
         public void Run()
@@ -168,7 +130,7 @@ namespace ConsoleRpg_2.Engine
                     switch (_currentState)
                     {
                         case GameState.Playing:
-                            PrintGameScreen();
+                            _gameScreen.Render();
                             break;
                         case GameState.Inventory:
                             break;
@@ -186,21 +148,22 @@ namespace ConsoleRpg_2.Engine
                 switch (_currentState)
                 {
                     case GameState.Playing:
-                        if (key.Key == ConsoleKey.L)
+                    {
+                        var processResult = _gameScreen.ProcessInput(key.Key);
+                        refreshFlag = processResult.RefreshFlag;
+                        if (processResult.SwitchState != null)
                         {
-                            ProcessLookAt();
+                            _currentState = processResult.SwitchState.Value;
                         }
-                        if (key.Key == ConsoleKey.P)
-                        {
-                            _currentState = GameState.Stats;
-                            refreshFlag = true;
-                        }
+                        _gameScreen.Update();
                         break;
+                    }
                     
                     case GameState.Inventory:
                         break;
-                    
+
                     case GameState.Stats:
+                    {
                         var processResult = _statScreen.ProcessInput(key.Key);
                         refreshFlag = processResult.RefreshFlag;
                         if (processResult.SwitchState != null)
@@ -209,6 +172,7 @@ namespace ConsoleRpg_2.Engine
                         }
                         _statScreen.Update();
                         break;
+                    }
                 }
                 
             } 

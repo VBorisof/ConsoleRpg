@@ -50,9 +50,18 @@ namespace ConsoleRpg_2.Helpers
                 },
             };
 
-            var pair = dict.First(p => p.Key <= value);
+            KeyValuePair<int, List<string>> pair;
 
-            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
+            try
+            {
+                pair = dict.First(p => p.Key <= value);
+            }
+            catch
+            {
+                pair = dict.Last();
+            }
+            
+            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count));
         }
         public static string GetPerceptionEpithet(int value)
         {
@@ -95,9 +104,18 @@ namespace ConsoleRpg_2.Helpers
                 },
             };
 
-            var pair = dict.First(p => p.Key <= value);
+            KeyValuePair<int, List<string>> pair;
 
-            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
+            try
+            {
+                pair = dict.First(p => p.Key <= value);
+            }
+            catch
+            {
+                pair = dict.Last();
+            }
+            
+            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count));
         }
         public static string GetStaminaEpithet(int value)
         {
@@ -126,9 +144,18 @@ namespace ConsoleRpg_2.Helpers
                 },
             };
 
-            var pair = dict.First(p => p.Key <= value);
+            KeyValuePair<int, List<string>> pair;
 
-            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));        
+            try
+            {
+                pair = dict.First(p => p.Key <= value);
+            }
+            catch
+            {
+                pair = dict.Last();
+            }
+            
+            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count));        
         }
         public static string GetCharismaEpithet(int value)
         {
@@ -171,9 +198,18 @@ namespace ConsoleRpg_2.Helpers
                 },
             };
 
-            var pair = dict.First(p => p.Key <= value);
+            KeyValuePair<int, List<string>> pair;
 
-            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
+            try
+            {
+                pair = dict.First(p => p.Key <= value);
+            }
+            catch
+            {
+                pair = dict.Last();
+            }
+
+            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count));
         }
         public static string GetIntelligenceEpithet(int value)
         {
@@ -216,9 +252,18 @@ namespace ConsoleRpg_2.Helpers
                 },
             };
 
-            var pair = dict.First(p => p.Key <= value);
+            KeyValuePair<int, List<string>> pair;
 
-            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
+            try
+            {
+                pair = dict.First(p => p.Key <= value);
+            }
+            catch
+            {
+                pair = dict.Last();
+            }
+            
+            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count));
         }
         
         public static string GetAgilityEpithet(int value)
@@ -262,9 +307,18 @@ namespace ConsoleRpg_2.Helpers
                 },
             };
 
-            var pair = dict.First(p => p.Key <= value);
+            KeyValuePair<int, List<string>> pair;
 
-            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count - 1));
+            try
+            {
+                pair = dict.First(p => p.Key <= value);
+            }
+            catch
+            {
+                pair = dict.Last();
+            }
+            
+            return pair.Value.ElementAt(Random.Next(0, pair.Value.Count));
         }
 
 
