@@ -34,8 +34,9 @@ namespace ConsoleRpg_2.Ui
             Console.WriteLine();
             ConsoleEx.WriteLine("".PadRight(BufferLength, '_'), ConsoleColor.Green);
 
-            var lines = _gameLog.Split(BufferLength)
-                .SelectMany(l => l.Split("\n").TakeLast(BufferSize))
+            var lines = _gameLog.Split("\n")
+                .SelectMany(l => l.Split(BufferLength))
+                .TakeLast(BufferSize)
                 .ToList();
             
             var emptyBufferLines = BufferSize - lines.Count;
