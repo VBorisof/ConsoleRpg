@@ -1,4 +1,4 @@
-namespace ConsoleRpg_2
+namespace ConsoleRpg_2.GameObjects
 {
     public class GameObject
     {

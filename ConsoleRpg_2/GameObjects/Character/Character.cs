@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using ConsoleRpg_2.GameObjects.Character.Actions;
+using ConsoleRpg_2.Helpers;
 
-namespace ConsoleRpg_2
+namespace ConsoleRpg_2.GameObjects.Character
 {
     public class Character : GameObject
     {

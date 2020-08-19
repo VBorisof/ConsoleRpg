@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsoleRpg_2
+namespace ConsoleRpg_2.Ui
 {
     public class UiSelectList
     {

@@ -1,6 +1,7 @@
 ﻿using System;
+using ConsoleRpg_2.GameObjects.Character;
 
-namespace ConsoleRpg_2
+namespace ConsoleRpg_2.Helpers
 {
     public static class RandomsHelper
     {

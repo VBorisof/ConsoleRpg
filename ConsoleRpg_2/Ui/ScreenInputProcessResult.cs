@@ -1,4 +1,6 @@
-﻿namespace ConsoleRpg_2
+﻿using ConsoleRpg_2.Engine;
+
+namespace ConsoleRpg_2.Ui
 {
     public class ScreenInputProcessResult
     {

@@ -1,4 +1,4 @@
-﻿namespace ConsoleRpg_2
+﻿namespace ConsoleRpg_2.Ui
 {
     public abstract class UiElement
     {

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConsoleRpg_2.GameObjects.Character;
 
-namespace ConsoleRpg_2
+namespace ConsoleRpg_2.Helpers
 {
     public static class LexicalHelper
     {

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using ConsoleRpg_2.GameObjects;
+using ConsoleRpg_2.GameObjects.Character;
 
-namespace ConsoleRpg_2
+namespace ConsoleRpg_2.Engine
 {
     class Scene
     {

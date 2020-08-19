@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            new Engine().Run();            
+            new Engine.Engine().Run();            
         }
     }
 }
