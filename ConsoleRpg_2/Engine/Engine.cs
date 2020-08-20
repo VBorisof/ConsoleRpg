@@ -58,7 +58,7 @@ namespace ConsoleRpg_2.Engine
             var player = new Character
             {
                 Name = "Player",
-                CurrentAction = "nothing",
+                CurrentAction = "Doing nothing",
                 DefaultAttitude = Attitude.Neutral,
                 Inventory = new Inventory
                 {

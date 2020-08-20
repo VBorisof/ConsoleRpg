@@ -44,6 +44,14 @@ namespace ConsoleRpg_2.Ui
             SetCurrentItemFocus(true);
         }
 
+        public void PressCurrentItem()
+        {
+            foreach (var uiElement in _rows.ElementAt(_index).Select(x => x))
+            {
+                uiElement.Press();
+            }
+        }
+
         public void Render()
         {
             foreach (var row in _rows)

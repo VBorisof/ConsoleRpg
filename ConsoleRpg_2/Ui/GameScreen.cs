@@ -6,9 +6,19 @@ using ConsoleRpg_2.GameObjects.Character;
 
 namespace ConsoleRpg_2.Ui
 {
+    public enum GameScreenState
+    {
+        World,
+        LookAt
+    }
+    
     public class GameScreen
     {
-        private const int BufferSize = 20;
+        private GameScreenState _screenState;
+
+        private UiSelectList _lookAtList;
+        
+        private const int BufferHeight = 25;
         private const int BufferLength = 60;
         
         private readonly Character _currentCharacter;
@@ -18,8 +28,8 @@ namespace ConsoleRpg_2.Ui
         public GameScreen(Character currentCharacter)
         {
             _currentCharacter = currentCharacter;
+            _screenState = GameScreenState.World;
         }
-        
         
         public void Render()
         {
@@ -36,10 +46,11 @@ namespace ConsoleRpg_2.Ui
 
             var lines = _gameLog.Split("\n")
                 .SelectMany(l => l.Split(BufferLength))
-                .TakeLast(BufferSize)
+                .TakeLast(BufferHeight)
                 .ToList();
             
-            var emptyBufferLines = BufferSize - lines.Count;
+            
+            var emptyBufferLines = BufferHeight - lines.Count;
             if (emptyBufferLines > 0)
             {
                 var emptyLine = "".PadLeft(BufferLength, ' ');
@@ -49,51 +60,79 @@ namespace ConsoleRpg_2.Ui
             ConsoleEx.WriteBlock(lines.Select(l => l.PadRight(BufferLength, ' ')), ConsoleColor.White, ConsoleColor.DarkGray);
             
             ConsoleEx.WriteLine("".PadRight(BufferLength, '_'), ConsoleColor.Green, ConsoleColor.DarkGray);
+
+            if (_screenState == GameScreenState.LookAt)
+            {
+                Console.WriteLine("Look at... (Q) to abort");
+                _lookAtList.Render();
+            }
         }
 
-        private void ProcessLookAt()
-        {
-            Console.WriteLine("Look at...");
-            var dict = _currentCharacter.CurrentScene.GetObjectDict();
-            foreach (var obj in dict)
-            {
-                Console.WriteLine($"{obj.Key} : {obj.Value.Name}");
-            }
-
-            var decisionKey = Console.ReadKey(intercept: true);
-            int.TryParse(decisionKey.KeyChar.ToString(), out var decisionIndex);
-                                            
-            while (decisionKey.Key != ConsoleKey.Q && !dict.ContainsKey(decisionIndex))
-            {
-                Console.WriteLine("Wrong input. Try again or use <q> to abort.");
-                        
-                decisionKey = Console.ReadKey(intercept: true);
-                int.TryParse(decisionKey.KeyChar.ToString(), out decisionIndex);
-            }
-
-            if (decisionKey.Key == ConsoleKey.Q)
-            {
-                return;
-            }
-                    
-            _gameLog += $"\n{_currentCharacter.Inspect(dict[decisionIndex]).Response}";
-        }
-        
         public ScreenInputProcessResult ProcessInput(ConsoleKey key)
         {       
             var result = new ScreenInputProcessResult();
-            
-            switch (key)
+
+            switch (_screenState)
             {
-                case ConsoleKey.L:
-                    ProcessLookAt();
+                case GameScreenState.World:
+                    switch (key)
+                    {
+                        case ConsoleKey.L:
+                            var labels = _currentCharacter.CurrentScene.GetObjectDict()
+                                .Select((o, i) => 
+                                    new UiLabel
+                                    {
+                                        Text = o.Value.Name,
+                                        Row = i + 1,
+                                        Column = 1,
+                                        OnPress = (_, __) =>
+                                        {
+                                            _gameLog += $"\n{_currentCharacter.Inspect(o.Value).Response}";
+                                        }
+                                    }
+                                ).ToList();
+                            _lookAtList = new UiSelectList(labels);
+    
+                            _screenState = GameScreenState.LookAt;
+
+                            result.RefreshFlag = true;
+                            
+                            break;
+                
+                        case ConsoleKey.P:
+                            result.SwitchState = GameState.Stats;
+                            result.RefreshFlag = true;
+                            break;
+                    }
                     break;
-                case ConsoleKey.P:
-                    result.SwitchState = GameState.Stats;
-                    result.RefreshFlag = true;
+                
+                case GameScreenState.LookAt:
+                    switch (key)
+                    {
+                        case ConsoleKey.Q:
+                            _screenState = GameScreenState.World;
+                            result.RefreshFlag = true;
+                            break;
+                
+                        case ConsoleKey.UpArrow:
+                            _lookAtList.PrevItem();
+                            result.RefreshFlag = true;
+                            break;
+                        
+                        case ConsoleKey.DownArrow:
+                            _lookAtList.NextItem();
+                            result.RefreshFlag = true;
+                            break;
+                        
+                        case ConsoleKey.Enter:
+                            _lookAtList.PressCurrentItem();
+                            _screenState = GameScreenState.World;
+                            result.RefreshFlag = true;
+                            break;
+                    }
                     break;
             }
-
+            
             return result;
         }
 

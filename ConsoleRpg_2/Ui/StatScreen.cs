@@ -8,6 +8,8 @@ namespace ConsoleRpg_2.Ui
 {
     public class StatScreen
     {
+        private const int BufferLength = 60;
+        
         private readonly Character _character;
         private readonly UiSelectList _selectList;
 
@@ -200,7 +202,7 @@ namespace ConsoleRpg_2.Ui
         {
             Console.Clear();
             ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.Gray);
-            ConsoleEx.WriteLine($"== Stats =====================================", ConsoleColor.Green);                    
+            ConsoleEx.WriteLine($"== Stats ".PadRight(BufferLength, '='), ConsoleColor.Green);                    
 
             Console.WriteLine();
             
@@ -224,7 +226,7 @@ namespace ConsoleRpg_2.Ui
             
             Console.WriteLine();
             
-            Console.WriteLine($"______________________________________________", ConsoleColor.Green);
+            Console.WriteLine("".PadRight(BufferLength, '_'), ConsoleColor.Green);
         }
 
         public ScreenInputProcessResult ProcessInput(ConsoleKey key)

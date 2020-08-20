@@ -1,4 +1,6 @@
-﻿namespace ConsoleRpg_2.Ui
+﻿using System;
+
+namespace ConsoleRpg_2.Ui
 {
     public abstract class UiElement
     {
@@ -9,5 +11,12 @@
         public int Column { get; set; }
 
         public abstract void Render();
+
+        public EventHandler OnPress = (_, __) => { };
+
+        public void Press()
+        {
+            OnPress(this, EventArgs.Empty);
+        }
     }
 }
