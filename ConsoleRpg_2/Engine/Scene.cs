@@ -17,30 +17,6 @@ namespace ConsoleRpg_2.Engine
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public Dictionary<int, GameObject> GetObjectDict()
-        {
-            var dict = new Dictionary<int, GameObject>();
-            
-            for (int i = 0; i < Items.Count; ++i)
-            {
-                dict[i + 1] = Items[i];
-            }
-            for (int i = 0; i < Characters.Count; ++i)
-            {
-                dict[i + 1 + Items.Count] = Characters[i];
-            }
-            for (int i = 0; i < Props.Count; ++i)
-            {
-                dict[i + 1 + Items.Count + Characters.Count] = Props[i];
-            }
-            for (int i = 0; i < Decorations.Count; ++i)
-            {
-                dict[i + 1 + Items.Count + Characters.Count + Props.Count] = Decorations[i];
-            }
-
-            return dict;
-        }
-
         public void InitializeScene()
         {           
             // Initialize attitudes if needed.
@@ -66,7 +42,27 @@ namespace ConsoleRpg_2.Engine
             
         }
 
+        public List<GameObject> GetObservableObjects()
+        {
+            var objects = new List<GameObject>();
+            
+            objects.AddRange(Items);
+            objects.AddRange(Characters);
+            objects.AddRange(Props);
+            objects.AddRange(Decorations);
 
+            return objects;
+        }
+        
+        public List<GameObject> GetConversableObjects()
+        {
+            var objects = new List<GameObject>();
+            
+            objects.AddRange(Characters);
+
+            return objects;
+        }
+        
         public SceneDescription GetSceneDescriptions()
         {
             var result = new SceneDescription

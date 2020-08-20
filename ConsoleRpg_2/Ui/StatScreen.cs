@@ -201,7 +201,6 @@ namespace ConsoleRpg_2.Ui
         public void Render()
         {
             Console.Clear();
-            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.Gray);
             ConsoleEx.WriteLine($"== Stats ".PadRight(BufferLength, '='), ConsoleColor.Green);                    
 
             Console.WriteLine();

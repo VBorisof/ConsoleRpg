@@ -18,7 +18,7 @@ namespace ConsoleRpg_2.Ui
 
         private UiSelectList _lookAtList;
         
-        private const int BufferHeight = 25;
+        private const int BufferHeight = 20;
         private const int BufferLength = 60;
         
         private readonly Character _currentCharacter;
@@ -35,7 +35,6 @@ namespace ConsoleRpg_2.Ui
         {
             Console.Clear();
                     
-            ConsoleEx.WriteLine($"Press `?` for help.", ConsoleColor.Gray);
             ConsoleEx.WriteLine($"== Game ".PadRight(BufferLength, '='), ConsoleColor.Green);
             Console.WriteLine();
             ConsoleEx.WriteLine($"You are in {_currentCharacter.CurrentScene.Name}", ConsoleColor.White);
@@ -61,10 +60,15 @@ namespace ConsoleRpg_2.Ui
             
             ConsoleEx.WriteLine("".PadRight(BufferLength, '_'), ConsoleColor.Green, ConsoleColor.DarkGray);
 
-            if (_screenState == GameScreenState.LookAt)
+            switch (_screenState)
             {
-                Console.WriteLine("Look at... (Q) to abort");
-                _lookAtList.Render();
+                case GameScreenState.World:
+                    PrintHelpMemo();
+                    break;
+                case GameScreenState.LookAt:
+                    Console.WriteLine("Look at... (Q) to abort");
+                    _lookAtList.Render();
+                    break;
             }
         }
 
@@ -78,16 +82,16 @@ namespace ConsoleRpg_2.Ui
                     switch (key)
                     {
                         case ConsoleKey.L:
-                            var labels = _currentCharacter.CurrentScene.GetObjectDict()
+                            var labels = _currentCharacter.CurrentScene.GetObservableObjects()
+                                .Except(new [] { _currentCharacter })
                                 .Select((o, i) => 
                                     new UiLabel
                                     {
-                                        Text = o.Value.Name,
-                                        Row = i + 1,
-                                        Column = 1,
+                                        Text = o.Name,
+                                        Row = i,
                                         OnPress = (_, __) =>
                                         {
-                                            _gameLog += $"\n{_currentCharacter.Inspect(o.Value).Response}";
+                                            _gameLog += $"\n{_currentCharacter.Inspect(o).Response}";
                                         }
                                     }
                                 ).ToList();
@@ -99,7 +103,7 @@ namespace ConsoleRpg_2.Ui
                             
                             break;
                 
-                        case ConsoleKey.P:
+                        case ConsoleKey.O:
                             result.SwitchState = GameState.Stats;
                             result.RefreshFlag = true;
                             break;
@@ -139,6 +143,29 @@ namespace ConsoleRpg_2.Ui
         public void Update()
         {
             
+        }
+
+
+        private void PrintHelpMemo()
+        {
+            var i = "\x1b[1m\x1b[33mi\x1b[0m";
+            var o = "\x1b[1m\x1b[33mo\x1b[0m";
+            var j = "\x1b[1m\x1b[33mj\x1b[0m";
+            var k = "\x1b[1m\x1b[33mk\x1b[0m";
+            var l = "\x1b[1m\x1b[33ml\x1b[0m";
+            var x = "\x1b[1m\x1b[33mx\x1b[0m";
+
+            var memo = $@"
+            Inventory --- {i} {o} --- Stats 
+                        {j} {k} {l}
+                       /  |  \
+                      /   |   \
+                    Use   |   Look at
+                        Talk
+
+  {x} - Quit
+";
+            Console.WriteLine(memo);            
         }
     }
 }
