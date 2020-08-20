@@ -1,0 +1,7 @@
+<items>
+  <item id="1" name="Ring of Eternity" description="Gives lotsa health">
+    <effects>
+      <MaxHealth>200</MaxHealth>
+    </effects>
+  </item>
+</items>

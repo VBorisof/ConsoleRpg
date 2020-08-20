@@ -5,7 +5,7 @@ using ConsoleRpg_2.GameObjects.Character;
 using ConsoleRpg_2.Ui;
 
 namespace ConsoleRpg_2.Engine
-{
+{   
     public class Engine
     {
         private readonly StatScreen _statScreen;

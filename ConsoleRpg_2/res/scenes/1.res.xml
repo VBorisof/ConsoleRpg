@@ -1,0 +1,10 @@
+<scene id="1">
+	<name>The Room</name>
+	<description></description>
+	<characters>
+		<character id="1" /> 
+	</characters>
+	<items />
+	<props />
+	<decorations />
+</scene>

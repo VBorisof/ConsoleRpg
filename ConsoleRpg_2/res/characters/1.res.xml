@@ -1,0 +1,80 @@
+<character id="1">
+  <name>Ogrem</name>
+  <startAction>Doing nothing</startAction>
+  <defaultAttitude>Neutral</defaultAttitude>
+  <stats>
+    <Level>1</Level>
+    <Race>Orc</Race>
+    <Gender>Male</Gender>
+    <MaxHealth>400</MaxHealth>
+    <MaxMana>50</MaxMana>
+    <MaxActionPoints>6</MaxActionPoints>
+    <Strength>8</Strength>
+    <Perception>2</Perception>
+    <Stamina>6</Stamina>
+    <Charisma>3</Charisma>
+    <Intelligence>1</Intelligence>
+    <Agility>5</Agility>
+  </stats>
+  <inventory>
+    <item id="1" />
+  </inventory>
+  <dialogues>
+    <dialogue id="1">
+      <text>Ughm? Human? Me Ogrem.</text>
+      <choices>
+        <choice 
+          condition="_player.Stats.Intelligence > 8" 
+          text="[Intelligence] Not the smart one, are you?"
+        >
+          <command>_npc.SetAttitudeAgitated(_player)</command>
+          <command>nextDialogue = 2</command>
+        </choice>
+        
+        <choice text="Hi! I am ${_player.Name}.">
+          <command>nextDialogue = 3</command>
+          <command>_npc.SetAttitudeInclined(_player)</command>
+        </choice>
+
+        <choice id="Piss off, orc scum. (Leave)">
+          <command>_npc.SetAttitudeAgitated(_player)</command>
+          <command>leave()</command>
+        </choice>
+      </choices>
+    </dialogue>
+
+    <dialogue id="2">
+      <text>
+        Me not need smart. Me need axe and your skull make funny red spots.
+      </text>
+      <choices>
+        <choice 
+          text="[Fight] Let's just see about that."
+        >
+          <command>fight()</command>
+        </choice>
+        
+        <choice text="Interesting, but let's not.">
+          <command>leave()</command>
+        </choice>
+      </choices>
+    </dialogue>
+
+    <dialogue id="2">
+      <text>
+        Ogrem first time hear this name. Me hope not last.
+      </text>
+      <choices>
+        <choice 
+          text="Where are we?"
+        >
+          <command>leave()</command>
+        </choice>
+        
+        <choice text="[Leave] Bye.">
+          <command>leave()</command>
+        </choice>
+      </choices>
+    </dialogue>
+  </dialogues>
+</character>
