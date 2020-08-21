@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using ConsoleRpg_2.GameObjects;
 using ConsoleRpg_2.GameObjects.Character;
 using ConsoleRpg_2.Ui;
 
@@ -19,14 +17,8 @@ namespace ConsoleRpg_2.Engine
             var player = new Character
             {
                 Name = "Player",
-                CurrentAction = "Doing nothing",
                 DefaultAttitude = Attitude.Neutral,
-                Inventory = new Inventory
-                {
-                    Items = new List<Item>
-                    {
-                    }
-                },
+                Inventory = new Inventory(),
                 Stats = new StatSet
                 {
                     Level = 1,
@@ -52,20 +44,15 @@ namespace ConsoleRpg_2.Engine
             
             var scene = _loader.LoadScene(1);
 
-            scene.InitializeScene();
             scene.Characters.Add(player);
             _currentCharacter.CurrentScene = scene;
             
-            _currentState = GameState.Playing;
+            scene.InitializeScene();
+            
+            _currentState = GameState.World;
             
             _gameScreen = new GameScreen(_currentCharacter);
             _statScreen = new StatScreen(_currentCharacter);
-        }
-        
-
-        private void HelpScreen()
-        {
-            Console.Clear();
         }
         
         public void Run()
@@ -80,7 +67,7 @@ namespace ConsoleRpg_2.Engine
                 {
                     switch (_currentState)
                     {
-                        case GameState.Playing:
+                        case GameState.World:
                             _gameScreen.Render();
                             break;
                         case GameState.Inventory:
@@ -98,7 +85,7 @@ namespace ConsoleRpg_2.Engine
                 
                 switch (_currentState)
                 {
-                    case GameState.Playing:
+                    case GameState.World:
                     {
                         var processResult = _gameScreen.ProcessInput(key.Key);
                         refreshFlag = processResult.RefreshFlag;

@@ -4,6 +4,6 @@ namespace ConsoleRpg_2.GameObjects.Character
 {
     public class Inventory
     {
-        public List<Item> Items { get; set; }
+        public List<Item> Items { get; set; } = new List<Item>();
     }
 }

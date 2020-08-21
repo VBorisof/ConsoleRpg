@@ -235,7 +235,7 @@ namespace ConsoleRpg_2.Ui
             switch (key)
             {
                 case ConsoleKey.Q:
-                    result.SwitchState = GameState.Playing;
+                    result.SwitchState = GameState.World;
                     result.RefreshFlag = true;
                     break;
                 case ConsoleKey.UpArrow:

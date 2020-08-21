@@ -54,13 +54,13 @@ namespace ConsoleRpg_2.Engine
             return objects;
         }
         
-        public List<GameObject> GetConversableObjects()
+        public List<Character> GetConversableCharacters()
         {
-            var objects = new List<GameObject>();
+            var characters = new List<Character>();
             
-            objects.AddRange(Characters);
+            characters.AddRange(Characters.Where(c => c.Dialogue != null));
 
-            return objects;
+            return characters;
         }
         
         public SceneDescription GetSceneDescriptions()

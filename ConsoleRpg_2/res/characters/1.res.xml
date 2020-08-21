@@ -42,22 +42,18 @@
     </dialogue>
 
     <dialogue id="2">
-      <text>
-        Me not need smart. Me need axe and your skull make funny red spots.
-      </text>
+      <text>Me not need smart. Me need axe and your skull make funny red spots.</text>
       <choices>
-        <choice text="[Fight] Let's just see about that." fight="true" />
-        <choice text="Interesting, but let's not." leave="true" />
+        <choice text="Let's just see about that. (Enter fight)" fight="true" />
+        <choice text="Interesting, but let's not. (Leave)" leave="true" />
       </choices>
     </dialogue>
 
     <dialogue id="3">
-      <text>
-        Ogrem first time hear this name. Me hope not last.
-      </text>
+      <text>Ogrem first time hear this name. Me hope not last.</text>
       <choices>
         <choice text="Where are we?" leave="true" />
-        <choice text="[Leave] Bye." leave="true" />
+        <choice text="Bye. (Leave)" leave="true" />
       </choices>
     </dialogue>
   </dialogues>

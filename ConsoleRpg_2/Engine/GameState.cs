@@ -2,7 +2,7 @@
 {
     public enum GameState
     {
-        Playing,
+        World,
         Inventory,
         Stats
     }

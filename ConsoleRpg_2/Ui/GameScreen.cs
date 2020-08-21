@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.Extensions;
 using ConsoleRpg_2.GameObjects.Character;
@@ -9,57 +10,46 @@ namespace ConsoleRpg_2.Ui
     public enum GameScreenState
     {
         World,
-        LookAt
+        LookAt,
+        TalkTo,
     }
-    
+
     public class GameScreen
     {
         private GameScreenState _screenState;
 
         private UiSelectList _lookAtList;
-        
-        private const int BufferHeight = 20;
-        private const int BufferLength = 60;
+
+        private TalkToScreen _talkToScreen;
         
         private readonly Character _currentCharacter;
 
-        private string _gameLog = $"[{DateTime.Now}] -- You have entered the game.";
+        private GameLog _gameLog;
         
         public GameScreen(Character currentCharacter)
         {
             _currentCharacter = currentCharacter;
             _screenState = GameScreenState.World;
+            
+            _gameLog = new GameLog();
+            _gameLog.WriteLine($"[{DateTime.Now}] -- You have entered the game.");
         }
+
         
-        public void Render()
+        private void RenderGameLog()
         {
-            Console.Clear();
-                    
-            ConsoleEx.WriteLine($"== Game ".PadRight(BufferLength, '='), ConsoleColor.Green);
+            ConsoleEx.WriteLine($"== Game ".PadRight(Configuration.BufferLength, '='), ConsoleColor.Green);
             Console.WriteLine();
             ConsoleEx.WriteLine($"You are in {_currentCharacter.CurrentScene.Name}", ConsoleColor.White);
             Console.WriteLine();
-            ConsoleEx.WriteLine($"{string.Join("\n", _currentCharacter.AnalyzeScene().Split(BufferLength))}", ConsoleColor.Gray);
+            ConsoleEx.WriteLine($"{string.Join("\n", _currentCharacter.AnalyzeScene().Split(Configuration.BufferLength))}", ConsoleColor.Gray);
             Console.WriteLine();
-            ConsoleEx.WriteLine("".PadRight(BufferLength, '_'), ConsoleColor.Green);
+            
+            _gameLog.Render();
+        }
 
-            var lines = _gameLog.Split("\n")
-                .SelectMany(l => l.Split(BufferLength))
-                .TakeLast(BufferHeight)
-                .ToList();
-            
-            
-            var emptyBufferLines = BufferHeight - lines.Count;
-            if (emptyBufferLines > 0)
-            {
-                var emptyLine = "".PadLeft(BufferLength, ' ');
-                lines.AddRange(Enumerable.Repeat(emptyLine, emptyBufferLines));
-            }
-            
-            ConsoleEx.WriteBlock(lines.Select(l => l.PadRight(BufferLength, ' ')), ConsoleColor.White, ConsoleColor.DarkGray);
-            
-            ConsoleEx.WriteLine("".PadRight(BufferLength, '_'), ConsoleColor.Green, ConsoleColor.DarkGray);
-
+        private void RenderState()
+        {
             switch (_screenState)
             {
                 case GameScreenState.World:
@@ -69,9 +59,117 @@ namespace ConsoleRpg_2.Ui
                     Console.WriteLine("Look at... (Q) to abort");
                     _lookAtList.Render();
                     break;
+                case GameScreenState.TalkTo:
+                    _talkToScreen.Render();
+                    break;
             }
         }
+        
+        public void Render()
+        {
+            Console.Clear();
+                    
+            RenderGameLog();
+            
+            RenderState();
+        }
 
+        public ScreenInputProcessResult ProcessWorldInput(ConsoleKey key)
+        {
+            var result = new ScreenInputProcessResult();
+            
+            switch (key)
+            {
+                case ConsoleKey.K:
+                {
+                    _talkToScreen = TalkToScreen.CreateOrDefault(_currentCharacter);
+
+                    if (_talkToScreen != null)
+                    {
+                        _screenState = GameScreenState.TalkTo;
+                    }
+                    else
+                    {
+                        _gameLog.WriteLine("There is no one you can talk to here.");
+                    }
+                    
+                    result.RefreshFlag = true;
+                    
+                    break;
+                }
+
+                case ConsoleKey.L:
+                {
+                    var labels = _currentCharacter.CurrentScene.GetObservableObjects()
+                        .Except(new[] {_currentCharacter})
+                        .Select((o, i) =>
+                            new UiLabel
+                            {
+                                Text = o.Name,
+                                Row = i,
+                                OnPress = (_, __) =>
+                                {
+                                    _gameLog.WriteLine($"{_currentCharacter.Inspect(o).Response}");
+                                }
+                            }
+                        ).ToList();
+
+                    if (labels.Any())
+                    {
+                        _lookAtList = new UiSelectList(labels);
+                        
+                        _screenState = GameScreenState.LookAt;
+                    }
+                    else
+                    {
+                        _gameLog.WriteLine("There is nothing to look at here.");
+                    }
+
+                    result.RefreshFlag = true;
+
+                    break;
+                }
+                
+                case ConsoleKey.O:
+                    result.SwitchState = GameState.Stats;
+                    result.RefreshFlag = true;
+                    break;
+            }
+
+            return result;
+        }
+
+        private ScreenInputProcessResult ProcessLookAtInput(ConsoleKey key)
+        {
+            var result = new ScreenInputProcessResult();
+            
+            switch (key)
+            {
+                case ConsoleKey.Q:
+                    _screenState = GameScreenState.World;
+                    result.RefreshFlag = true;
+                    break;
+                
+                case ConsoleKey.UpArrow:
+                    _lookAtList.PrevItem();
+                    result.RefreshFlag = true;
+                    break;
+                        
+                case ConsoleKey.DownArrow:
+                    _lookAtList.NextItem();
+                    result.RefreshFlag = true;
+                    break;
+                        
+                case ConsoleKey.Enter:
+                    _lookAtList.PressCurrentItem();
+                    _screenState = GameScreenState.World;
+                    result.RefreshFlag = true;
+                    break;
+            }
+
+            return result;
+        }
+        
         public ScreenInputProcessResult ProcessInput(ConsoleKey key)
         {       
             var result = new ScreenInputProcessResult();
@@ -79,61 +177,26 @@ namespace ConsoleRpg_2.Ui
             switch (_screenState)
             {
                 case GameScreenState.World:
-                    switch (key)
-                    {
-                        case ConsoleKey.L:
-                            var labels = _currentCharacter.CurrentScene.GetObservableObjects()
-                                .Except(new [] { _currentCharacter })
-                                .Select((o, i) => 
-                                    new UiLabel
-                                    {
-                                        Text = o.Name,
-                                        Row = i,
-                                        OnPress = (_, __) =>
-                                        {
-                                            _gameLog += $"\n{_currentCharacter.Inspect(o).Response}";
-                                        }
-                                    }
-                                ).ToList();
-                            _lookAtList = new UiSelectList(labels);
-    
-                            _screenState = GameScreenState.LookAt;
-
-                            result.RefreshFlag = true;
-                            
-                            break;
-                
-                        case ConsoleKey.O:
-                            result.SwitchState = GameState.Stats;
-                            result.RefreshFlag = true;
-                            break;
-                    }
+                    result = ProcessWorldInput(key);
                     break;
                 
                 case GameScreenState.LookAt:
-                    switch (key)
-                    {
-                        case ConsoleKey.Q:
-                            _screenState = GameScreenState.World;
-                            result.RefreshFlag = true;
-                            break;
+                    result = ProcessLookAtInput(key);
+                    break;
                 
-                        case ConsoleKey.UpArrow:
-                            _lookAtList.PrevItem();
-                            result.RefreshFlag = true;
-                            break;
-                        
-                        case ConsoleKey.DownArrow:
-                            _lookAtList.NextItem();
-                            result.RefreshFlag = true;
-                            break;
-                        
-                        case ConsoleKey.Enter:
-                            _lookAtList.PressCurrentItem();
-                            _screenState = GameScreenState.World;
-                            result.RefreshFlag = true;
-                            break;
+                case GameScreenState.TalkTo:
+                    // Overengineering in the flesh...
+                    result = _talkToScreen.ProcessInput(key, endDialogueCallback: () =>
+                    {
+                        _screenState = GameScreenState.World;
+                        _talkToScreen = null;
+                    });
+
+                    if (result.SwitchState == GameState.World)
+                    {
+                        _screenState = GameScreenState.World;
                     }
+                    
                     break;
             }
             

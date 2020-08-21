@@ -1,6 +1,6 @@
 <scene id="1">
 	<name>The Room</name>
-	<description></description>
+	<description>Just a silly room. Four walls and a surprising absence of doors or windows.</description>
 	<characters>
 		<character id="1" /> 
 	</characters>
