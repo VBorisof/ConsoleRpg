@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.GameObjects.Character.Actions;
+using ConsoleRpg_2.GameObjects.Character.Dialogues;
 using ConsoleRpg_2.Helpers;
 
 namespace ConsoleRpg_2.GameObjects.Character
@@ -12,6 +13,7 @@ namespace ConsoleRpg_2.GameObjects.Character
         public StatSet Stats { get; set; }
         public Inventory Inventory { get; set; }
         public List<Skill> Skills { get; set; }
+        public Dialogue Dialogue { get; set; }
 
         public Attitude DefaultAttitude { get; set; }
 

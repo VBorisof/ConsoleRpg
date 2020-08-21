@@ -48,5 +48,10 @@ namespace ConsoleRpg_2.Extensions
 
             return result;
         }
+
+        public static bool EqualsIgnoreCase(this string lhs, string rhs)
+        {
+            return lhs.Equals(rhs, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

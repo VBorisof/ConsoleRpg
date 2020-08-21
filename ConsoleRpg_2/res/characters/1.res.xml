@@ -26,19 +26,17 @@
         <choice 
           condition="_player.Stats.Intelligence > 8" 
           text="[Intelligence] Not the smart one, are you?"
+          nextDialogue="2"
         >
           <command>_npc.SetAttitudeAgitated(_player)</command>
-          <command>nextDialogue = 2</command>
         </choice>
         
-        <choice text="Hi! I am ${_player.Name}.">
-          <command>nextDialogue = 3</command>
+        <choice text="Hi! I am ${_player.Name}." nextDialogue="3">
           <command>_npc.SetAttitudeInclined(_player)</command>
         </choice>
 
-        <choice id="Piss off, orc scum. (Leave)">
+        <choice text="Piss off, orc scum. (Leave)" leave="true">
           <command>_npc.SetAttitudeAgitated(_player)</command>
-          <command>leave()</command>
         </choice>
       </choices>
     </dialogue>
@@ -48,32 +46,18 @@
         Me not need smart. Me need axe and your skull make funny red spots.
       </text>
       <choices>
-        <choice 
-          text="[Fight] Let's just see about that."
-        >
-          <command>fight()</command>
-        </choice>
-        
-        <choice text="Interesting, but let's not.">
-          <command>leave()</command>
-        </choice>
+        <choice text="[Fight] Let's just see about that." fight="true" />
+        <choice text="Interesting, but let's not." leave="true" />
       </choices>
     </dialogue>
 
-    <dialogue id="2">
+    <dialogue id="3">
       <text>
         Ogrem first time hear this name. Me hope not last.
       </text>
       <choices>
-        <choice 
-          text="Where are we?"
-        >
-          <command>leave()</command>
-        </choice>
-        
-        <choice text="[Leave] Bye.">
-          <command>leave()</command>
-        </choice>
+        <choice text="Where are we?" leave="true" />
+        <choice text="[Leave] Bye." leave="true" />
       </choices>
     </dialogue>
   </dialogues>

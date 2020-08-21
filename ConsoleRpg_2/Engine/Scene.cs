@@ -9,10 +9,10 @@ namespace ConsoleRpg_2.Engine
 {
     public class Scene
     {
-        public List<Item> Items { get; set; }
-        public List<Decoration> Decorations { get; set; }
-        public List<Prop> Props { get; set; }
-        public List<Character> Characters { get; set; }
+        public List<Item> Items { get; set; } = new List<Item>();
+        public List<Decoration> Decorations { get; set; } = new List<Decoration>();
+        public List<Prop> Props { get; set; } = new List<Prop>();
+        public List<Character> Characters { get; set; } = new List<Character>();
 
         public string Name { get; set; }
         public string Description { get; set; }
