@@ -61,8 +61,6 @@ namespace ConsoleRpg_2.Engine
             bool refreshFlag = true;
             do
             {
-                key = new ConsoleKeyInfo();
-
                 if (refreshFlag)
                 {
                     switch (_currentState)

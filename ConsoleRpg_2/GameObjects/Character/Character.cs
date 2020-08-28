@@ -21,6 +21,23 @@ namespace ConsoleRpg_2.GameObjects.Character
 
         public string CurrentAction { get; set; }
 
+        public Character()
+        {
+            Skills = new List<Skill>
+            {
+                new Skill
+                {
+                    Name = "Attack",
+                    Description = "Basic Attack",
+                    SkillType = SkillType.Meelee,
+                    Level = 1,
+                    BasePower = 1,
+                    ActionPoints = 2,
+                    ManaConsumption = 0
+                }
+            };
+        }
+        
         
         public string AnalyzeScene()
         {
@@ -116,6 +133,46 @@ namespace ConsoleRpg_2.GameObjects.Character
             }
             
             return result;
+        }
+
+        public SkillResult ApplySkill(Skill skill, Character target)
+        {
+            if (Stats.Mana < skill.ManaConsumption)
+            {
+                return new SkillResult
+                {
+                    IsSuccess = false,
+                    Comment = "Not enough mana."
+                };
+            }
+
+            int damage = 0;
+            
+            switch (skill.SkillType)
+            {
+                case SkillType.Meelee:
+                    damage = skill.BasePower * (Stats.Strength / 2);
+                    break;
+                case SkillType.Heal:
+                    damage = - (skill.BasePower * (Stats.Intelligence / 2));
+                    break;
+                case SkillType.Projectile:
+                    damage = skill.BasePower * (Stats.Intelligence);
+                    break;
+                case SkillType.AreaOfEffect:
+                    damage = skill.BasePower * (Stats.Intelligence / 3);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            Stats.Mana -= skill.ManaConsumption;
+
+            return new SkillResult
+            {
+                IsSuccess = true,
+                Damage = damage,
+            };
         }
     }
 }
