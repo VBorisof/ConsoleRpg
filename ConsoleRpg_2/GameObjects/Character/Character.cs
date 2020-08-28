@@ -197,15 +197,19 @@ namespace ConsoleRpg_2.GameObjects.Character
             {
                 case SkillType.Meelee:
                     result.Damage = skill.BasePower * (Stats.Strength / 2);
+                    target.Stats.Health -= skill.BasePower * (Stats.Strength / 2);
                     break;
                 case SkillType.Heal:
                     result.Damage = - (skill.BasePower * (Stats.Intelligence / 2));
+                    target.Stats.Health += - (skill.BasePower * (Stats.Intelligence / 2));
                     break;
                 case SkillType.Projectile:
                     result.Damage = skill.BasePower * (Stats.Intelligence);
+                    target.Stats.Health -= skill.BasePower * (Stats.Intelligence);
                     break;
                 case SkillType.AreaOfEffect:
                     result.Damage = skill.BasePower * (Stats.Intelligence / 3);
+                    target.Stats.Health -= skill.BasePower * (Stats.Intelligence / 3);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

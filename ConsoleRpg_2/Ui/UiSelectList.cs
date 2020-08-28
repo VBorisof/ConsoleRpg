@@ -9,6 +9,8 @@ namespace ConsoleRpg_2.Ui
         private int _index;
         private readonly IOrderedEnumerable<IGrouping<int, UiElement>> _rows;
 
+        public string Title { get; set; }
+
         public UiSelectList(IEnumerable<UiElement> elements)
         {
             _rows = elements.GroupBy(e => e.Row)
@@ -54,6 +56,11 @@ namespace ConsoleRpg_2.Ui
 
         public void Render()
         {
+            if (! string.IsNullOrEmpty(Title))
+            {
+                Console.WriteLine(Title);
+            }
+            
             foreach (var row in _rows)
             {
                 foreach (var column in row.OrderBy(e => e.Column))

@@ -12,6 +12,7 @@ namespace ConsoleRpg_2.Ui
         World,
         LookAt,
         TalkTo,
+        HotBarUse
     }
 
     public enum GameScreenBottomMenuState
@@ -26,6 +27,7 @@ namespace ConsoleRpg_2.Ui
         private GameScreenBottomMenuState _bottomMenuState = GameScreenBottomMenuState.Help;
 
         private UiSelectList _lookAtList;
+        private UiSelectList _hotBarUseList;
 
         private TalkToScreen _talkToScreen;
         
@@ -76,6 +78,9 @@ namespace ConsoleRpg_2.Ui
                     break;
                 case GameScreenState.TalkTo:
                     _talkToScreen.Render();
+                    break;
+                case GameScreenState.HotBarUse:
+                    _hotBarUseList.Render();
                     break;
             }
         }
@@ -171,6 +176,60 @@ namespace ConsoleRpg_2.Ui
                     result.RefreshFlag = true;
                     
                     break;
+                
+                case ConsoleKey.D1:
+                    if (_currentCharacter.HotBar.Slot1 != null)
+                    {
+                        var labels = _currentCharacter.CurrentScene.Characters
+                            .Select((c, i) => new UiLabel
+                            {
+                                Text = c.Name,
+                                Row = i,
+                                OnPress = (_, __) =>
+                                {
+                                    if (_currentCharacter.HotBar.Slot1 is Skill skill)
+                                    {
+                                        var skillResult = _currentCharacter.ApplySkill(skill, c);
+                                        if (! skillResult.IsSuccess)
+                                        {
+                                            _gameLog.WriteLine(skillResult.Comment);    
+                                        }
+                                        else
+                                        {
+                                            if (skillResult.Damage >= 0)
+                                            {
+                                                _gameLog.WriteLine(
+                                                    $"You deal {skillResult.Damage} damage to {c.Name}."
+                                                );
+                                            }
+                                            else
+                                            {
+                                                _gameLog.WriteLine(
+                                                    $"You heal {c.Name} for {-skillResult.Damage} health points."
+                                                );
+                                            }    
+                                        }
+                                    }
+                                }
+                            })
+                            .ToList();
+
+                        var title = $"Use {_currentCharacter.HotBar.Slot1.Name} on...";
+
+                        if (_currentCharacter.HotBar.Slot1 is Skill)
+                        {
+                            title = $"Apply {_currentCharacter.HotBar.Slot1.Name} on...";
+                        }
+                        
+                        _hotBarUseList = new UiSelectList(labels)
+                        {
+                            Title = title
+                        };
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
             }
 
             return result;
@@ -207,6 +266,37 @@ namespace ConsoleRpg_2.Ui
             return result;
         }
         
+        private ScreenInputProcessResult ProcessHotBarUseInput(ConsoleKey key)
+        {
+            var result = new ScreenInputProcessResult();
+            
+            switch (key)
+            {
+                case ConsoleKey.Q:
+                    _screenState = GameScreenState.World;
+                    result.RefreshFlag = true;
+                    break;
+                
+                case ConsoleKey.UpArrow:
+                    _hotBarUseList.PrevItem();
+                    result.RefreshFlag = true;
+                    break;
+                        
+                case ConsoleKey.DownArrow:
+                    _hotBarUseList.NextItem();
+                    result.RefreshFlag = true;
+                    break;
+                        
+                case ConsoleKey.Enter:
+                    _hotBarUseList.PressCurrentItem();
+                    _screenState = GameScreenState.World;
+                    result.RefreshFlag = true;
+                    break;
+            }
+
+            return result;
+        }
+        
         public ScreenInputProcessResult ProcessInput(ConsoleKey key)
         {       
             var result = new ScreenInputProcessResult();
@@ -219,6 +309,10 @@ namespace ConsoleRpg_2.Ui
                 
                 case GameScreenState.LookAt:
                     result = ProcessLookAtInput(key);
+                    break;
+           
+                case GameScreenState.HotBarUse:
+                    result = ProcessHotBarUseInput(key);
                     break;
                 
                 case GameScreenState.TalkTo:
