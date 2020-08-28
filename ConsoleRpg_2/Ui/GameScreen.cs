@@ -14,9 +14,16 @@ namespace ConsoleRpg_2.Ui
         TalkTo,
     }
 
+    public enum GameScreenBottomMenuState
+    {
+        Help,
+        Hotbar
+    }
+
     public class GameScreen
     {
         private GameScreenState _screenState;
+        private GameScreenBottomMenuState _bottomMenuState = GameScreenBottomMenuState.Help;
 
         private UiSelectList _lookAtList;
 
@@ -53,7 +60,15 @@ namespace ConsoleRpg_2.Ui
             switch (_screenState)
             {
                 case GameScreenState.World:
-                    PrintHelpMemo();
+                    switch (_bottomMenuState)
+                    {
+                        case GameScreenBottomMenuState.Help:
+                            PrintHelpMemo();
+                            break;
+                        case GameScreenBottomMenuState.Hotbar:
+                            PrintHotBar();
+                            break;
+                    }
                     break;
                 case GameScreenState.LookAt:
                     Console.WriteLine("Look at... (Q) to abort");
@@ -134,6 +149,28 @@ namespace ConsoleRpg_2.Ui
                     result.SwitchState = GameState.Stats;
                     result.RefreshFlag = true;
                     break;
+                
+                case ConsoleKey.RightArrow:
+                    _bottomMenuState++;
+
+                    if (! Enum.IsDefined(typeof(GameScreenBottomMenuState), _bottomMenuState))
+                    {
+                        _bottomMenuState = GameScreenBottomMenuState.Help;
+                    }
+                    result.RefreshFlag = true;
+
+                    break;
+                    
+                case ConsoleKey.LeftArrow:
+                    _bottomMenuState--;
+
+                    if (! Enum.IsDefined(typeof(GameScreenBottomMenuState), _bottomMenuState))
+                    {
+                        _bottomMenuState = GameScreenBottomMenuState.Hotbar;
+                    }
+                    result.RefreshFlag = true;
+                    
+                    break;
             }
 
             return result;
@@ -211,12 +248,17 @@ namespace ConsoleRpg_2.Ui
 
         private void PrintHelpMemo()
         {
+            Console.WriteLine();
+            Console.WriteLine("== Memo ".PadRight(Configuration.BufferLength, '='));
+            
             var i = "\x1b[1m\x1b[33mi\x1b[0m";
             var o = "\x1b[1m\x1b[33mo\x1b[0m";
             var j = "\x1b[1m\x1b[33mj\x1b[0m";
             var k = "\x1b[1m\x1b[33mk\x1b[0m";
             var l = "\x1b[1m\x1b[33ml\x1b[0m";
             var x = "\x1b[1m\x1b[33mx\x1b[0m";
+            var left  = "\x1b[1m\x1b[33m<-\x1b[0m";
+            var right = "\x1b[1m\x1b[33m->\x1b[0m";
 
             var memo = $@"
             Inventory --- {i} {o} --- Stats 
@@ -226,9 +268,32 @@ namespace ConsoleRpg_2.Ui
                     Use   |   Look at
                         Talk
 
-  {x} - Quit
+  {x} - Quit      {left} {right} - Cycle this menu 
 ";
-            Console.WriteLine(memo);            
+            Console.WriteLine(memo);
+        }
+
+        private void PrintHotBar()
+        {
+            Console.WriteLine();
+            Console.WriteLine("== Your Hotbar ".PadRight(Configuration.BufferLength, '='));
+            Console.WriteLine();
+            
+            var slots = _currentCharacter.HotBar
+                .GetSlots();
+
+            for (int i = 0; i < slots.Count; ++i)
+            {
+                var slotNumberColor = ConsoleColor.White;
+
+                if (slots[i] != null)
+                {
+                    slotNumberColor = ConsoleColor.Yellow;
+                }
+                
+                ConsoleEx.Write($"{i+1} ".PadRight(3), slotNumberColor);
+                ConsoleEx.WriteLine($"- {slots[i]?.Name}", ConsoleColor.White);
+            }
         }
     }
 }

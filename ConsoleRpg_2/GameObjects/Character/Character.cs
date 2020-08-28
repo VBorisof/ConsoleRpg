@@ -7,6 +7,41 @@ using ConsoleRpg_2.Helpers;
 
 namespace ConsoleRpg_2.GameObjects.Character
 {
+    public class HotBar
+    {
+        public GameObject Slot1 { get; set; }
+        public GameObject Slot2 { get; set; }
+        public GameObject Slot3 { get; set; }
+        public GameObject Slot4 { get; set; }
+        public GameObject Slot5 { get; set; }
+        public GameObject Slot6 { get; set; }
+        public GameObject Slot7 { get; set; }
+        public GameObject Slot8 { get; set; }
+        public GameObject Slot9 { get; set; }
+        public GameObject Slot10 { get; set; }
+        public GameObject Slot11 { get; set; }
+        public GameObject Slot12 { get; set; }
+
+        public List<GameObject> GetSlots()
+        {
+            return new List<GameObject>
+            {
+                Slot1,
+                Slot2,
+                Slot3,
+                Slot4,
+                Slot5,
+                Slot6,
+                Slot7,
+                Slot8,
+                Slot9,
+                Slot10,
+                Slot11,
+                Slot12,
+            };
+        }
+    }
+    
     public class Character : GameObject
     {
         public Scene CurrentScene { get; set; }
@@ -14,6 +49,7 @@ namespace ConsoleRpg_2.GameObjects.Character
         public Inventory Inventory { get; set; }
         public List<Skill> Skills { get; set; }
         public Dialogue Dialogue { get; set; }
+        public HotBar HotBar { get; set; }
 
         public Attitude DefaultAttitude { get; set; }
 
@@ -23,18 +59,25 @@ namespace ConsoleRpg_2.GameObjects.Character
 
         public Character()
         {
+            var attack = new Skill
+            {
+                Name = "Attack",
+                Description = "Basic Attack",
+                SkillType = SkillType.Meelee,
+                Level = 1,
+                BasePower = 1,
+                ActionPoints = 2,
+                ManaConsumption = 0
+            }; 
+            
             Skills = new List<Skill>
             {
-                new Skill
-                {
-                    Name = "Attack",
-                    Description = "Basic Attack",
-                    SkillType = SkillType.Meelee,
-                    Level = 1,
-                    BasePower = 1,
-                    ActionPoints = 2,
-                    ManaConsumption = 0
-                }
+                attack  
+            };
+
+            HotBar = new HotBar
+            {
+                Slot1 = attack
             };
         }
         
@@ -146,21 +189,23 @@ namespace ConsoleRpg_2.GameObjects.Character
                 };
             }
 
-            int damage = 0;
-            
+            var result = new SkillResult
+            {
+                IsSuccess = true,
+            };
             switch (skill.SkillType)
             {
                 case SkillType.Meelee:
-                    damage = skill.BasePower * (Stats.Strength / 2);
+                    result.Damage = skill.BasePower * (Stats.Strength / 2);
                     break;
                 case SkillType.Heal:
-                    damage = - (skill.BasePower * (Stats.Intelligence / 2));
+                    result.Damage = - (skill.BasePower * (Stats.Intelligence / 2));
                     break;
                 case SkillType.Projectile:
-                    damage = skill.BasePower * (Stats.Intelligence);
+                    result.Damage = skill.BasePower * (Stats.Intelligence);
                     break;
                 case SkillType.AreaOfEffect:
-                    damage = skill.BasePower * (Stats.Intelligence / 3);
+                    result.Damage = skill.BasePower * (Stats.Intelligence / 3);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -168,11 +213,7 @@ namespace ConsoleRpg_2.GameObjects.Character
 
             Stats.Mana -= skill.ManaConsumption;
 
-            return new SkillResult
-            {
-                IsSuccess = true,
-                Damage = damage,
-            };
+            return result;
         }
     }
 }
