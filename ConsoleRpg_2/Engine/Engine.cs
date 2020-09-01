@@ -1,4 +1,5 @@
 ﻿using System;
+using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.GameObjects.Character;
 using ConsoleRpg_2.Ui;
 
@@ -115,7 +116,7 @@ namespace ConsoleRpg_2.Engine
                 }
                 
             } 
-            while (key.Key != ConsoleKey.X);
+            while (key.Key != KeyMapping.ExitGame);
             
             Console.Clear();
             Console.WriteLine("You have left the game.");

@@ -58,15 +58,6 @@ namespace ConsoleRpg_2.GameObjects.Character
             HotBar = new HotBar(_gameLog)
             {
                 Slot1  = {GameObject = attack},
-                Slot2  = {GameObject = frozenBolt},
-                Slot3  = {GameObject = attack},
-                Slot4  = {GameObject = frozenBolt},
-                Slot5  = {GameObject = attack},
-                Slot6  = {GameObject = frozenBolt},
-                Slot7  = {GameObject = attack},
-                Slot8  = {GameObject = frozenBolt},
-                Slot9  = {GameObject = attack},
-                Slot10 = {GameObject = frozenBolt},
             };
         }
         

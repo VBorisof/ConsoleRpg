@@ -100,7 +100,7 @@ namespace ConsoleRpg_2.Ui
             
             switch (key)
             {
-                case ConsoleKey.K:
+                case KeyMapping.ShowTalkMenu:
                 {
                     _talkToScreen = TalkToScreen.CreateOrDefault(_currentCharacter);
 
@@ -118,7 +118,7 @@ namespace ConsoleRpg_2.Ui
                     break;
                 }
 
-                case ConsoleKey.L:
+                case KeyMapping.ShowLookMenu:
                 {
                     var labels = _currentCharacter.CurrentScene.GetObservableObjects()
                         .Except(new[] {_currentCharacter})
@@ -150,12 +150,12 @@ namespace ConsoleRpg_2.Ui
                     break;
                 }
                 
-                case ConsoleKey.O:
+                case KeyMapping.ShowStats:
                     result.SwitchState = GameState.Stats;
                     result.RefreshFlag = true;
                     break;
                 
-                case ConsoleKey.RightArrow:
+                case KeyMapping.SlideRight:
                     _bottomMenuState++;
 
                     if (! Enum.IsDefined(typeof(GameScreenBottomMenuState), _bottomMenuState))
@@ -166,7 +166,7 @@ namespace ConsoleRpg_2.Ui
 
                     break;
                     
-                case ConsoleKey.LeftArrow:
+                case KeyMapping.SlideLeft:
                     _bottomMenuState--;
 
                     if (! Enum.IsDefined(typeof(GameScreenBottomMenuState), _bottomMenuState))
@@ -177,7 +177,7 @@ namespace ConsoleRpg_2.Ui
                     
                     break;
                 
-                case ConsoleKey.D1:
+                case KeyMapping.HotBar_1:
                     if (_currentCharacter.HotBar.Slot1.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot1;
@@ -188,7 +188,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D2:
+                case KeyMapping.HotBar_2:
                     if (_currentCharacter.HotBar.Slot2.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot2;
@@ -199,7 +199,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D3:
+                case KeyMapping.HotBar_3:
                     if (_currentCharacter.HotBar.Slot3.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot3;
@@ -210,7 +210,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D4:
+                case KeyMapping.HotBar_4:
                     if (_currentCharacter.HotBar.Slot4.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot4;
@@ -221,7 +221,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D5:
+                case KeyMapping.HotBar_5:
                     if (_currentCharacter.HotBar.Slot5.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot5;
@@ -232,7 +232,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D6:
+                case KeyMapping.HotBar_6:
                     if (_currentCharacter.HotBar.Slot6.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot6;
@@ -243,7 +243,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D7:
+                case KeyMapping.HotBar_7:
                     if (_currentCharacter.HotBar.Slot7.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot7;
@@ -254,7 +254,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D8:
+                case KeyMapping.HotBar_8:
                     if (_currentCharacter.HotBar.Slot8.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot8;
@@ -265,7 +265,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D9:
+                case KeyMapping.HotBar_9:
                     if (_currentCharacter.HotBar.Slot9.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot9;
@@ -276,7 +276,7 @@ namespace ConsoleRpg_2.Ui
                     }
                     break;
                 
-                case ConsoleKey.D0:
+                case KeyMapping.HotBar_10:
                     if (_currentCharacter.HotBar.Slot10.IsOccupied)
                     {
                         _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot10;
@@ -297,22 +297,22 @@ namespace ConsoleRpg_2.Ui
             
             switch (key)
             {
-                case ConsoleKey.Q:
+                case KeyMapping.Cancel:
                     _screenState = GameScreenState.World;
                     result.RefreshFlag = true;
                     break;
                 
-                case ConsoleKey.UpArrow:
+                case KeyMapping.PreviousItem:
                     _lookAtList.PrevItem();
                     result.RefreshFlag = true;
                     break;
                         
-                case ConsoleKey.DownArrow:
+                case KeyMapping.NextItem:
                     _lookAtList.NextItem();
                     result.RefreshFlag = true;
                     break;
                         
-                case ConsoleKey.Enter:
+                case KeyMapping.Confirm:
                     _lookAtList.PressCurrentItem();
                     _screenState = GameScreenState.World;
                     result.RefreshFlag = true;
@@ -328,22 +328,22 @@ namespace ConsoleRpg_2.Ui
             
             switch (key)
             {
-                case ConsoleKey.Q:
+                case KeyMapping.Cancel:
                     _screenState = GameScreenState.World;
                     result.RefreshFlag = true;
                     break;
                 
-                case ConsoleKey.UpArrow:
+                case KeyMapping.PreviousItem:
                     _currentCharacter.HotBar.SelectedSlot.PrevItem();
                     result.RefreshFlag = true;
                     break;
                         
-                case ConsoleKey.DownArrow:
+                case KeyMapping.NextItem:
                     _currentCharacter.HotBar.SelectedSlot.NextItem();
                     result.RefreshFlag = true;
                     break;
                         
-                case ConsoleKey.Enter:
+                case KeyMapping.Confirm:
                     _currentCharacter.HotBar.SelectedSlot.PressCurrentItem();
                     _currentCharacter.HotBar.SelectedSlot = null;
                     _screenState = GameScreenState.World;
@@ -416,8 +416,8 @@ namespace ConsoleRpg_2.Ui
                         {j} {k} {l}
                        /  |  \
                       /   |   \
-                    Use   |   Look at
-                        Talk
+                   Talk   |   Look at
+                        Skills
 
   {x} - Quit      {left} {right} - Cycle this menu 
 ";
