@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.GameObjects.Character.Actions;
@@ -7,41 +7,6 @@ using ConsoleRpg_2.Helpers;
 
 namespace ConsoleRpg_2.GameObjects.Character
 {
-    public class HotBar
-    {
-        public GameObject Slot1 { get; set; }
-        public GameObject Slot2 { get; set; }
-        public GameObject Slot3 { get; set; }
-        public GameObject Slot4 { get; set; }
-        public GameObject Slot5 { get; set; }
-        public GameObject Slot6 { get; set; }
-        public GameObject Slot7 { get; set; }
-        public GameObject Slot8 { get; set; }
-        public GameObject Slot9 { get; set; }
-        public GameObject Slot10 { get; set; }
-        public GameObject Slot11 { get; set; }
-        public GameObject Slot12 { get; set; }
-
-        public List<GameObject> GetSlots()
-        {
-            return new List<GameObject>
-            {
-                Slot1,
-                Slot2,
-                Slot3,
-                Slot4,
-                Slot5,
-                Slot6,
-                Slot7,
-                Slot8,
-                Slot9,
-                Slot10,
-                Slot11,
-                Slot12,
-            };
-        }
-    }
-    
     public class Character : GameObject
     {
         public Scene CurrentScene { get; set; }
