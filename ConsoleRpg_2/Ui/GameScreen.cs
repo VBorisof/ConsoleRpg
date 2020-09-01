@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.Engine;
@@ -80,7 +80,7 @@ namespace ConsoleRpg_2.Ui
                     _talkToScreen.Render();
                     break;
                 case GameScreenState.HotBarUse:
-                    _hotBarUseList.Render();
+                    _currentCharacter.HotBar.SelectedSlot.Render();
                     break;
             }
         }
@@ -178,53 +178,109 @@ namespace ConsoleRpg_2.Ui
                     break;
                 
                 case ConsoleKey.D1:
-                    if (_currentCharacter.HotBar.Slot1 != null)
+                    if (_currentCharacter.HotBar.Slot1.IsOccupied)
                     {
-                        var labels = _currentCharacter.CurrentScene.Characters
-                            .Select((c, i) => new UiLabel
-                            {
-                                Text = c.Name,
-                                Row = i,
-                                OnPress = (_, __) =>
-                                {
-                                    if (_currentCharacter.HotBar.Slot1 is Skill skill)
-                                    {
-                                        var skillResult = _currentCharacter.ApplySkill(skill, c);
-                                        if (! skillResult.IsSuccess)
-                                        {
-                                            _gameLog.WriteLine(skillResult.Comment);    
-                                        }
-                                        else
-                                        {
-                                            if (skillResult.Damage >= 0)
-                                            {
-                                                _gameLog.WriteLine(
-                                                    $"You deal {skillResult.Damage} damage to {c.Name}."
-                                                );
-                                            }
-                                            else
-                                            {
-                                                _gameLog.WriteLine(
-                                                    $"You heal {c.Name} for {-skillResult.Damage} health points."
-                                                );
-                                            }    
-                                        }
-                                    }
-                                }
-                            })
-                            .ToList();
-
-                        var title = $"Use {_currentCharacter.HotBar.Slot1.Name} on...";
-
-                        if (_currentCharacter.HotBar.Slot1 is Skill)
-                        {
-                            title = $"Apply {_currentCharacter.HotBar.Slot1.Name} on...";
-                        }
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot1;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
-                        _hotBarUseList = new UiSelectList(labels)
-                        {
-                            Title = title
-                        };
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D2:
+                    if (_currentCharacter.HotBar.Slot2.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot2;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D3:
+                    if (_currentCharacter.HotBar.Slot3.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot3;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D4:
+                    if (_currentCharacter.HotBar.Slot4.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot4;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D5:
+                    if (_currentCharacter.HotBar.Slot5.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot5;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D6:
+                    if (_currentCharacter.HotBar.Slot6.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot6;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D7:
+                    if (_currentCharacter.HotBar.Slot7.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot7;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D8:
+                    if (_currentCharacter.HotBar.Slot8.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot8;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D9:
+                    if (_currentCharacter.HotBar.Slot9.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot9;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+                        
+                        _screenState = GameScreenState.HotBarUse;
+                        result.RefreshFlag = true;
+                    }
+                    break;
+                
+                case ConsoleKey.D0:
+                    if (_currentCharacter.HotBar.Slot10.IsOccupied)
+                    {
+                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot10;
+                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
                         result.RefreshFlag = true;
@@ -278,17 +334,18 @@ namespace ConsoleRpg_2.Ui
                     break;
                 
                 case ConsoleKey.UpArrow:
-                    _hotBarUseList.PrevItem();
+                    _currentCharacter.HotBar.SelectedSlot.PrevItem();
                     result.RefreshFlag = true;
                     break;
                         
                 case ConsoleKey.DownArrow:
-                    _hotBarUseList.NextItem();
+                    _currentCharacter.HotBar.SelectedSlot.NextItem();
                     result.RefreshFlag = true;
                     break;
                         
                 case ConsoleKey.Enter:
-                    _hotBarUseList.PressCurrentItem();
+                    _currentCharacter.HotBar.SelectedSlot.PressCurrentItem();
+                    _currentCharacter.HotBar.SelectedSlot = null;
                     _screenState = GameScreenState.World;
                     result.RefreshFlag = true;
                     break;
@@ -386,7 +443,7 @@ namespace ConsoleRpg_2.Ui
                 }
                 
                 ConsoleEx.Write($"{i+1} ".PadRight(3), slotNumberColor);
-                ConsoleEx.WriteLine($"- {slots[i]?.Name}", ConsoleColor.White);
+                ConsoleEx.WriteLine($"- {slots[i].Name}", ConsoleColor.White);
             }
         }
     }
