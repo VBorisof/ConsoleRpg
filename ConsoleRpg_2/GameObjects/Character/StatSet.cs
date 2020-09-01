@@ -14,6 +14,8 @@
         public int MaxMana { get; set; }
         public int MaxActionPoints { get; set; }
 
+        public bool IsDead => Health <= 0; 
+
         public int AvailableBaseSkillPoints { get; set; }
 
         public int Strength { get; set; }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.Engine;
@@ -35,12 +35,12 @@ namespace ConsoleRpg_2.Ui
 
         private GameLog _gameLog;
         
-        public GameScreen(Character currentCharacter)
+        public GameScreen(GameLog gameLog, Character currentCharacter)
         {
             _currentCharacter = currentCharacter;
             _screenState = GameScreenState.World;
             
-            _gameLog = new GameLog();
+            _gameLog = gameLog;
             _gameLog.WriteLine($"[{DateTime.Now}] -- You have entered the game.");
         }
 

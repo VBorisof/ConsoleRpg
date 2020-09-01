@@ -1,14 +1,16 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.GameObjects.Character.Actions;
 using ConsoleRpg_2.GameObjects.Character.Dialogues;
 using ConsoleRpg_2.Helpers;
+using ConsoleRpg_2.Ui;
 
 namespace ConsoleRpg_2.GameObjects.Character
 {
     public class Character : GameObject
     {
+        private readonly GameLog _gameLog;
         public Scene CurrentScene { get; set; }
         public StatSet Stats { get; set; }
         public Inventory Inventory { get; set; }
@@ -22,8 +24,10 @@ namespace ConsoleRpg_2.GameObjects.Character
 
         public string CurrentAction { get; set; }
 
-        public Character()
+        public Character(GameLog gameLog)
         {
+            _gameLog = gameLog;
+            
             var attack = new Skill
             {
                 Name = "Attack",
@@ -33,16 +37,36 @@ namespace ConsoleRpg_2.GameObjects.Character
                 BasePower = 1,
                 ActionPoints = 2,
                 ManaConsumption = 0
-            }; 
+            };
+            
+            var frozenBolt = new Skill
+            {
+                Name = "Frozen Bolt",
+                Description = "Generates a giant frozen projectile for your beloved enemies. Chilly!",
+                SkillType = SkillType.Projectile,
+                Level = 1,
+                BasePower = 2,
+                ActionPoints = 3,
+                ManaConsumption = 10
+            };
             
             Skills = new List<Skill>
             {
                 attack  
             };
 
-            HotBar = new HotBar
+            HotBar = new HotBar(_gameLog)
             {
-                Slot1 = attack
+                Slot1  = {GameObject = attack},
+                Slot2  = {GameObject = frozenBolt},
+                Slot3  = {GameObject = attack},
+                Slot4  = {GameObject = frozenBolt},
+                Slot5  = {GameObject = attack},
+                Slot6  = {GameObject = frozenBolt},
+                Slot7  = {GameObject = attack},
+                Slot8  = {GameObject = frozenBolt},
+                Slot9  = {GameObject = attack},
+                Slot10 = {GameObject = frozenBolt},
             };
         }
         

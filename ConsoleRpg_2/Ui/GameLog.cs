@@ -9,7 +9,6 @@ namespace ConsoleRpg_2.Ui
     {   
         private string _gameLog;
 
-
         public void WriteLine(string line)
         {
             if (string.IsNullOrEmpty(_gameLog))

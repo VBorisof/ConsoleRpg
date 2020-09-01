@@ -10,11 +10,14 @@ namespace ConsoleRpg_2.Engine
         private Character _currentCharacter;
         private GameState _currentState;
         private GameScreen _gameScreen;
-        private XmlLoader _loader = new XmlLoader();
+        private XmlLoader _loader;
+        private GameLog _gameLog = new GameLog();
         
         public Engine()
         {
-            var player = new Character
+            _loader = new XmlLoader(_gameLog);
+            
+            var player = new Character(_gameLog)
             {
                 Name = "Player",
                 DefaultAttitude = Attitude.Neutral,
@@ -51,7 +54,7 @@ namespace ConsoleRpg_2.Engine
             
             _currentState = GameState.World;
             
-            _gameScreen = new GameScreen(_currentCharacter);
+            _gameScreen = new GameScreen(_gameLog, _currentCharacter);
             _statScreen = new StatScreen(_currentCharacter);
         }
         

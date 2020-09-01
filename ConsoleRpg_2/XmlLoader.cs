@@ -6,15 +6,23 @@ using ConsoleRpg_2.Extensions;
 using ConsoleRpg_2.GameObjects;
 using ConsoleRpg_2.GameObjects.Character;
 using ConsoleRpg_2.GameObjects.Character.Dialogues;
+using ConsoleRpg_2.Ui;
 
 namespace ConsoleRpg_2
 {
     public class XmlLoader
     {
+        private readonly GameLog _gameLog;
         private const string ScenesPath = "res/scenes";
         private const string CharactersPath = "res/characters";
 
         private XElement ItemsRoot = XElement.Load($"res/items.res.xml");
+
+        public XmlLoader(GameLog gameLog)
+        {
+            _gameLog = gameLog;
+        }
+        
         
         public Item LoadItem(int id)
         {
@@ -61,7 +69,7 @@ namespace ConsoleRpg_2
             Character character;
 
             // General info
-            character = new Character
+            character = new Character(_gameLog)
             {
                 Name = root.Element("name").Value,
                 CurrentAction = root.Element("startAction").Value,
