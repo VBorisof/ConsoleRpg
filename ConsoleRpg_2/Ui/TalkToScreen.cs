@@ -64,19 +64,19 @@ namespace ConsoleRpg_2.Ui
                     if (CurrentDialogue == null)
                     {
                         result.SwitchState = GameState.World;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                 
                     break;
                 
                 case ConsoleKey.UpArrow:
                     TalkToList.PrevItem();
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 
                 case ConsoleKey.DownArrow:
                     TalkToList.NextItem();
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 
                 case ConsoleKey.Enter:
@@ -100,7 +100,7 @@ namespace ConsoleRpg_2.Ui
                             }).ToList()
                         );
                     }
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
             }
             

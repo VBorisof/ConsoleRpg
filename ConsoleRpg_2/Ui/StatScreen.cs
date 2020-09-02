@@ -236,23 +236,23 @@ namespace ConsoleRpg_2.Ui
             {
                 case ConsoleKey.Q:
                     result.SwitchState = GameState.World;
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 case ConsoleKey.UpArrow:
                     PrevItem();
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 case ConsoleKey.DownArrow:
                     NextItem();
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 case ConsoleKey.LeftArrow:
                     AdjustBaseSkillValue(-1);
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 case ConsoleKey.RightArrow:
                     AdjustBaseSkillValue(1);
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
             }
 

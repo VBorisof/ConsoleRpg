@@ -4,7 +4,8 @@ namespace ConsoleRpg_2.Ui
 {
     public class ScreenInputProcessResult
     {
-        public bool RefreshFlag { get; set; }
+        public bool RerenderFlag { get; set; }
+        public bool UpdateFlag { get; set; }
         public GameState? SwitchState { get; set; }
     }
 }

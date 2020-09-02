@@ -199,5 +199,10 @@ namespace ConsoleRpg_2.GameObjects.Character
 
             return result;
         }
+
+        public void TakeFightTurn()
+        {
+            
+        }
     }
 }

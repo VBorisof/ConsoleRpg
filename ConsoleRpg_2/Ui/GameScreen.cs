@@ -111,7 +111,7 @@ namespace ConsoleRpg_2.Ui
                         _gameLog.WriteLine("There is no one you can talk to here.");
                     }
                     
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     
                     break;
                 }
@@ -143,14 +143,14 @@ namespace ConsoleRpg_2.Ui
                         _gameLog.WriteLine("There is nothing to look at here.");
                     }
 
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
 
                     break;
                 }
                 
                 case KeyMapping.ShowStats:
                     result.SwitchState = GameState.Stats;
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 
                 case KeyMapping.SlideRight:
@@ -160,7 +160,7 @@ namespace ConsoleRpg_2.Ui
                     {
                         _bottomMenuState = GameScreenBottomMenuState.Help;
                     }
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
 
                     break;
                     
@@ -171,7 +171,7 @@ namespace ConsoleRpg_2.Ui
                     {
                         _bottomMenuState = GameScreenBottomMenuState.Hotbar;
                     }
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     
                     break;
                 
@@ -182,7 +182,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -193,7 +193,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -204,7 +204,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -215,7 +215,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -226,7 +226,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -237,7 +237,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -248,7 +248,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -259,7 +259,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -270,7 +270,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
                 
@@ -281,7 +281,7 @@ namespace ConsoleRpg_2.Ui
                         _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
                         
                         _screenState = GameScreenState.HotBarUse;
-                        result.RefreshFlag = true;
+                        result.RerenderFlag = true;
                     }
                     break;
             }
@@ -297,23 +297,23 @@ namespace ConsoleRpg_2.Ui
             {
                 case KeyMapping.Cancel:
                     _screenState = GameScreenState.World;
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 
                 case KeyMapping.PreviousItem:
                     _lookAtList.PrevItem();
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                         
                 case KeyMapping.NextItem:
                     _lookAtList.NextItem();
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                         
                 case KeyMapping.Confirm:
                     _lookAtList.PressCurrentItem();
                     _screenState = GameScreenState.World;
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
             }
 
@@ -328,24 +328,24 @@ namespace ConsoleRpg_2.Ui
             {
                 case KeyMapping.Cancel:
                     _screenState = GameScreenState.World;
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                 
                 case KeyMapping.PreviousItem:
                     _currentCharacter.HotBar.SelectedSlot.PrevItem();
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                         
                 case KeyMapping.NextItem:
                     _currentCharacter.HotBar.SelectedSlot.NextItem();
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
                         
                 case KeyMapping.Confirm:
                     _currentCharacter.HotBar.SelectedSlot.PressCurrentItem();
                     _currentCharacter.HotBar.SelectedSlot = null;
                     _screenState = GameScreenState.World;
-                    result.RefreshFlag = true;
+                    result.RerenderFlag = true;
                     break;
             }
 
