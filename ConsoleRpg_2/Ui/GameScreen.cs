@@ -27,7 +27,6 @@ namespace ConsoleRpg_2.Ui
         private GameScreenBottomMenuState _bottomMenuState = GameScreenBottomMenuState.Help;
 
         private UiSelectList _lookAtList;
-        private UiSelectList _hotBarUseList;
 
         private TalkToScreen _talkToScreen;
         
@@ -41,7 +40,6 @@ namespace ConsoleRpg_2.Ui
             _screenState = GameScreenState.World;
             
             _gameLog = gameLog;
-            _gameLog.WriteLine($"[{DateTime.Now}] -- You have entered the game.");
         }
 
         
@@ -391,12 +389,6 @@ namespace ConsoleRpg_2.Ui
             return result;
         }
 
-        public void Update()
-        {
-            
-        }
-
-
         private void PrintHelpMemo()
         {
             Console.WriteLine();
@@ -435,15 +427,15 @@ namespace ConsoleRpg_2.Ui
 
             for (int i = 0; i < slots.Count; ++i)
             {
-                var slotNumberColor = ConsoleColor.White;
+                var slotColor = ConsoleColor.Gray;
 
-                if (slots[i] != null)
+                if (slots[i].IsOccupied)
                 {
-                    slotNumberColor = ConsoleColor.Yellow;
+                    slotColor = ConsoleColor.White;
                 }
                 
-                ConsoleEx.Write($"{i+1} ".PadRight(3), slotNumberColor);
-                ConsoleEx.WriteLine($"- {slots[i].Name}", ConsoleColor.White);
+                ConsoleEx.Write($"{i+1} ".PadRight(3), ConsoleColor.Yellow);
+                ConsoleEx.WriteLine($"~ {slots[i].Name}", slotColor);
             }
         }
     }

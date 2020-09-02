@@ -3,6 +3,7 @@
     public enum GameState
     {
         World,
+        Fight,
         Inventory,
         Stats
     }
