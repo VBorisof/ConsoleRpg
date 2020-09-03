@@ -27,6 +27,7 @@ namespace ConsoleRpg_2.Configurations
         public const ConsoleKey SlideRight = ConsoleKey.RightArrow;
         public const ConsoleKey PreviousItem = ConsoleKey.DownArrow;
         public const ConsoleKey Confirm = ConsoleKey.Enter;
+        public const ConsoleKey EndTurn = ConsoleKey.Spacebar;
 
         public const ConsoleKey ExitGame = ConsoleKey.X;
     }

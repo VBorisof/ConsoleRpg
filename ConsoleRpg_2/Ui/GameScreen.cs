@@ -435,7 +435,13 @@ namespace ConsoleRpg_2.Ui
                 }
                 
                 ConsoleEx.Write($"{i+1} ".PadRight(3), ConsoleColor.Yellow);
-                ConsoleEx.WriteLine($"~ {slots[i].Name}", slotColor);
+                ConsoleEx.Write($"~ {slots[i].Name}", slotColor);
+                if (slots[i].GameObject is Skill skill)
+                {
+                    ConsoleEx.Write($" ({skill.ActionPoints} AP)", ConsoleColor.Cyan);
+                }
+                
+                Console.WriteLine();
             }
         }
     }

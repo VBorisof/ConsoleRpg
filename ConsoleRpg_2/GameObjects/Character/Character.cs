@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.GameObjects.Character.Actions;
 using ConsoleRpg_2.GameObjects.Character.Dialogues;
@@ -8,6 +9,12 @@ using ConsoleRpg_2.Ui;
 
 namespace ConsoleRpg_2.GameObjects.Character
 {
+    public enum CharacterType
+    {
+        Player,
+        NPC
+    }
+    
     public class Character : GameObject
     {
         private readonly GameLog _gameLog;
@@ -18,6 +25,7 @@ namespace ConsoleRpg_2.GameObjects.Character
         public Dialogue Dialogue { get; set; }
         public HotBar HotBar { get; set; }
 
+        public CharacterType CharacterType { get; set; } = CharacterType.NPC;
         public Attitude DefaultAttitude { get; set; }
 
         public Dictionary<Character, Attitude> Attitudes { get; set; } = new Dictionary<Character, Attitude>();
@@ -160,6 +168,15 @@ namespace ConsoleRpg_2.GameObjects.Character
 
         public SkillResult ApplySkill(Skill skill, Character target)
         {
+            if (Stats.ActionPoints < skill.ActionPoints)
+            {
+                return new SkillResult
+                {
+                    IsSuccess = false,
+                    Comment = "Not enough action points."
+                };
+            }
+                        
             if (Stats.Mana < skill.ManaConsumption)
             {
                 return new SkillResult
@@ -196,7 +213,8 @@ namespace ConsoleRpg_2.GameObjects.Character
             }
 
             Stats.Mana -= skill.ManaConsumption;
-
+            Stats.ActionPoints -= skill.ActionPoints;
+            
             return result;
         }
 
