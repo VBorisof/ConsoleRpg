@@ -25,6 +25,7 @@ namespace ConsoleRpg_2.GameObjects.Character
         public Dialogue Dialogue { get; set; }
         public HotBar HotBar { get; set; }
 
+        public IFightComponent FightComponent { get; set; }
         public CharacterType CharacterType { get; set; } = CharacterType.NPC;
         public Attitude DefaultAttitude { get; set; }
 
