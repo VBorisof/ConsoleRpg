@@ -3,9 +3,11 @@ using System.Linq;
 using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.Extensions;
-using ConsoleRpg_2.GameObjects.Character;
+using ConsoleRpg_2.GameObjects.Characters;
+using ConsoleRpg_2.GameObjects.Characters.Skills;
+using ConsoleRpg_2.Ui;
 
-namespace ConsoleRpg_2.Ui
+namespace ConsoleRpg_2.Screens
 {
     public enum GameScreenState
     {

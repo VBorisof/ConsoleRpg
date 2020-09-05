@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.Engine;
-using ConsoleRpg_2.GameObjects.Character.Actions;
-using ConsoleRpg_2.GameObjects.Character.Dialogues;
+using ConsoleRpg_2.GameObjects.Characters.Actions;
+using ConsoleRpg_2.GameObjects.Characters.Dialogues;
+using ConsoleRpg_2.GameObjects.Characters.FightComponent;
+using ConsoleRpg_2.GameObjects.Characters.Skills;
 using ConsoleRpg_2.Helpers;
 using ConsoleRpg_2.Ui;
 
-namespace ConsoleRpg_2.GameObjects.Character
+namespace ConsoleRpg_2.GameObjects.Characters
 {
-    public enum CharacterType
-    {
-        Player,
-        NPC
-    }
-    
     public class Character : GameObject
     {
         private readonly GameLog _gameLog;
@@ -23,7 +18,7 @@ namespace ConsoleRpg_2.GameObjects.Character
         public Inventory Inventory { get; set; }
         public List<Skill> Skills { get; set; }
         public Dialogue Dialogue { get; set; }
-        public HotBar HotBar { get; set; }
+        public HotBar.HotBar HotBar { get; set; }
 
         public IFightComponent FightComponent { get; set; }
         public CharacterType CharacterType { get; set; } = CharacterType.NPC;
@@ -41,30 +36,20 @@ namespace ConsoleRpg_2.GameObjects.Character
             {
                 Name = "Attack",
                 Description = "Basic Attack",
-                SkillType = SkillType.Meelee,
+                SkillType = SkillType.Melee,
                 Level = 1,
                 BasePower = 1,
                 ActionPoints = 2,
                 ManaConsumption = 0
             };
             
-            var frozenBolt = new Skill
-            {
-                Name = "Frozen Bolt",
-                Description = "Generates a giant frozen projectile for your beloved enemies. Chilly!",
-                SkillType = SkillType.Projectile,
-                Level = 1,
-                BasePower = 2,
-                ActionPoints = 3,
-                ManaConsumption = 10
-            };
             
             Skills = new List<Skill>
             {
                 attack  
             };
 
-            HotBar = new HotBar(_gameLog)
+            HotBar = new HotBar.HotBar(_gameLog)
             {
                 Slot1  = {GameObject = attack},
             };
@@ -193,7 +178,7 @@ namespace ConsoleRpg_2.GameObjects.Character
             };
             switch (skill.SkillType)
             {
-                case SkillType.Meelee:
+                case SkillType.Melee:
                     result.Damage = skill.BasePower * (Stats.Strength / 2);
                     target.Stats.Health -= skill.BasePower * (Stats.Strength / 2);
                     break;

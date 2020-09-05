@@ -1,0 +1,9 @@
+<skill id="1">
+    <name>Attack</name>
+    <description>Basic Melee Attack</description>
+    <level>1</level>
+    <actionPoints>2</actionPoints>
+    <manaConsumption>0</manaConsumption>
+    <skillType>Melee</skillType>
+    <basePower>1</basePower>
+</skill>

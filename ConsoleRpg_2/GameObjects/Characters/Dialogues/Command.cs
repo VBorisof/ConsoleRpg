@@ -1,4 +1,4 @@
-﻿namespace ConsoleRpg_2.GameObjects.Character.Dialogues
+﻿namespace ConsoleRpg_2.GameObjects.Characters.Dialogues
 {
     public class Command
     {

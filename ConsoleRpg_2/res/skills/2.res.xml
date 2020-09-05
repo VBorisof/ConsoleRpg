@@ -1,0 +1,9 @@
+<skill id="2">
+    <name>Frozen Bolt</name>
+    <description>Generates a giant frozen projectile for your beloved enemies. Chilly!</description>
+    <level>1</level>
+    <actionPoints>3</actionPoints>
+    <manaConsumption>10</manaConsumption>
+    <skillType>Projectile</skillType>
+    <basePower>2</basePower>
+</skill>

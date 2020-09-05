@@ -1,7 +1,8 @@
 ﻿using System.Linq;
+using ConsoleRpg_2.GameObjects.Characters.Skills;
 using ConsoleRpg_2.Ui;
 
-namespace ConsoleRpg_2.GameObjects.Character
+namespace ConsoleRpg_2.GameObjects.Characters.HotBar
 {
     public class HotBarSlot
     {

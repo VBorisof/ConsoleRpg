@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConsoleRpg_2.GameObjects.Character;
+using ConsoleRpg_2.GameObjects.Characters;
 
 namespace ConsoleRpg_2.Helpers
 {

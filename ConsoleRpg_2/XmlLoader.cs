@@ -4,8 +4,9 @@ using System.Xml.Linq;
 using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.Extensions;
 using ConsoleRpg_2.GameObjects;
-using ConsoleRpg_2.GameObjects.Character;
-using ConsoleRpg_2.GameObjects.Character.Dialogues;
+using ConsoleRpg_2.GameObjects.Characters;
+using ConsoleRpg_2.GameObjects.Characters.Dialogues;
+using ConsoleRpg_2.GameObjects.Characters.FightComponent;
 using ConsoleRpg_2.Ui;
 
 namespace ConsoleRpg_2
@@ -99,6 +100,9 @@ namespace ConsoleRpg_2
             };
 
             character.Stats = statSet;
+            character.Stats.Health = character.Stats.MaxHealth;
+            character.Stats.Mana = character.Stats.MaxMana;
+            character.Stats.ActionPoints = character.Stats.MaxActionPoints;
             
             
             // Inventory 
@@ -159,6 +163,8 @@ namespace ConsoleRpg_2
                 character.Dialogue = dialogues.OrderBy(d => d.Id).First();
             }
             
+            character.FightComponent = new NpcFightComponent(_gameLog, character);
+            
             return character;
         }
         
@@ -178,8 +184,12 @@ namespace ConsoleRpg_2
                 var characters = charactersElement.Elements("character")
                     .Select(e => LoadCharacter(int.Parse(e.Attribute("id").Value)))
                     .ToList();
-
+                
                 scene.Characters = characters;
+                foreach (var character in scene.Characters)
+                {
+                    character.CurrentScene = scene;
+                }
             }
 
             return scene;

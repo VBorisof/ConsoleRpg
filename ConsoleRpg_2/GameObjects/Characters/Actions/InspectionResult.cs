@@ -1,4 +1,4 @@
-﻿namespace ConsoleRpg_2.GameObjects.Character.Actions
+﻿namespace ConsoleRpg_2.GameObjects.Characters.Actions
 {
     public class InspectionResult
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleRpg_2.GameObjects.Character
+namespace ConsoleRpg_2.GameObjects.Characters
 {
     public class Inventory
     {

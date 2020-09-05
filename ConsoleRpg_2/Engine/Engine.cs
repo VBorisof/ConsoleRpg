@@ -1,6 +1,8 @@
 ﻿using System;
 using ConsoleRpg_2.Configurations;
-using ConsoleRpg_2.GameObjects.Character;
+using ConsoleRpg_2.GameObjects.Characters;
+using ConsoleRpg_2.GameObjects.Characters.FightComponent;
+using ConsoleRpg_2.Screens;
 using ConsoleRpg_2.Ui;
 
 namespace ConsoleRpg_2.Engine
@@ -47,7 +49,8 @@ namespace ConsoleRpg_2.Engine
                     Agility = 10,
                 }
             };
-
+            player.FightComponent = new PlayerFightComponent(player);
+            
             _currentCharacter = player;
             
             var scene = _loader.LoadScene(1);
@@ -90,6 +93,7 @@ namespace ConsoleRpg_2.Engine
                     rerenderFlag = false;
                 }
 
+                // In case of a fight, don't ask for the key, if we are waiting for someone else's turn.
                 if (_currentState == GameState.Fight && !_fightScreen.Manual)
                 {
                     key = new ConsoleKeyInfo(); 
@@ -136,7 +140,6 @@ namespace ConsoleRpg_2.Engine
                         {
                             _currentState = processResult.SwitchState.Value;
                         }
-                        _fightScreen.Update();
                         break;
                     }
                 }

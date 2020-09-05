@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ConsoleRpg_2.Ui;
 
-namespace ConsoleRpg_2.GameObjects.Character
+namespace ConsoleRpg_2.GameObjects.Characters.HotBar
 {
     public class HotBar
     {

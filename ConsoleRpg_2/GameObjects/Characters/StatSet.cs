@@ -1,4 +1,4 @@
-﻿namespace ConsoleRpg_2.GameObjects.Character
+﻿namespace ConsoleRpg_2.GameObjects.Characters
 {
     public class StatSet
     {

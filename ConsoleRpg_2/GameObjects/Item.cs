@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using ConsoleRpg_2.GameObjects.Character;
+using ConsoleRpg_2.GameObjects.Characters;
+using ConsoleRpg_2.GameObjects.Characters.Skills;
 
 namespace ConsoleRpg_2.GameObjects
 {

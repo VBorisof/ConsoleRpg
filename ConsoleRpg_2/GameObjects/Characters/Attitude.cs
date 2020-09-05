@@ -1,4 +1,4 @@
-namespace ConsoleRpg_2.GameObjects.Character
+namespace ConsoleRpg_2.GameObjects.Characters
 {
     // Make sure these are ordered in a sensible way
     // to make some calculations work.

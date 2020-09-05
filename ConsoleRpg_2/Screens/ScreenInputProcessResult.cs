@@ -1,6 +1,6 @@
 ﻿using ConsoleRpg_2.Engine;
 
-namespace ConsoleRpg_2.Ui
+namespace ConsoleRpg_2.Screens
 {
     public class ScreenInputProcessResult
     {
