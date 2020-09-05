@@ -381,5 +381,143 @@ namespace ConsoleRpg_2.Helpers
             }
             return "It";
         }
+
+        public static string GetHealthString(int health, int maxHealth, LexicalVerbosity verbosity)
+        {
+            var percent = health / (float) maxHealth;
+            
+            switch (verbosity)
+            {
+                case LexicalVerbosity.Poor:
+                {
+                    if (percent >= 1)
+                    {
+                        return "Healthy";
+                    }
+                    else if (percent >= 0.75)
+                    {
+                        return "Unwell";
+                    }
+                    else if (percent >= 0.50)
+                    {
+                        return "Beaten";
+                    }
+                    else if (percent >= 0.25)
+                    {
+                        return "Heavily beaten";
+                    }
+                    else if (percent >= 0.10)
+                    {
+                        return "Barely alive";
+                    }
+                    else if (percent > 0)
+                    {
+                        return "Almost dead";
+                    }
+                    break;
+                }
+                
+                case LexicalVerbosity.Normal:
+                {
+                    if (percent >= 1)
+                    {
+                        return "Very healthy";
+                    }
+                    else if (percent >= 0.80)
+                    {
+                        return "Healthy";
+                    }
+                    else if (percent >= 0.60)
+                    {
+                        return "Slightly beaten";
+                    }
+                    else if (percent >= 0.40)
+                    {
+                        return "Fairly beaten";
+                    }
+                    else if (percent >= 0.20)
+                    {
+                        return "Heavily beaten";
+                    }
+                    else if (percent >= 0.10)
+                    {
+                        return "Barely alive";
+                    }
+                    else if (percent > 0)
+                    {
+                        return "Almost dead";
+                    }
+                    break;
+                }
+                
+                case LexicalVerbosity.High:
+                {
+                    if (percent >= 1)
+                    {
+                        return "Perfectly Healthy";
+                    }
+                    else if (percent >= 0.90)
+                    {
+                        return "Very Healthy";
+                    }
+                    else if (percent >= 0.80)
+                    {
+                        return "Slightly unwell";
+                    }
+                    else if (percent >= 0.70)
+                    {
+                        return "Slightly damaged";
+                    }
+                    else if (percent >= 0.60)
+                    {
+                        return "Fairly damaged";
+                    }
+                    else if (percent >= 0.50)
+                    {
+                        return "Half-alive";
+                    }
+                    else if (percent >= 0.40)
+                    {
+                        return "Very damaged";
+                    }
+                    else if (percent >= 0.30)
+                    {
+                        return "Heavily damaged";
+                    }
+                    else if (percent >= 0.20)
+                    {
+                        return "One-fifth alive";
+                    }
+                    else if (percent >= 0.10)
+                    {
+                        return "Slightly Alive";
+                    }
+                    else if (percent >= 0.05)
+                    {
+                        return "Barely Alive";
+                    }
+                    else if (percent > 0)
+                    {
+                        return "Almost dead";
+                    }
+                    break;
+                }
+                case LexicalVerbosity.VeryHigh:
+                {
+                    return $"{health}/{maxHealth}";
+                    break;
+                }
+            }
+
+            return "Dead";
+        }
+    }
+
+    public enum LexicalVerbosity
+    {
+        Poor,
+        Normal,
+        High,
+        VeryHigh
     }
 }

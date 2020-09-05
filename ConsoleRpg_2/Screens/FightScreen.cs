@@ -42,7 +42,7 @@ namespace ConsoleRpg_2.Screens
                 result.RerenderFlag = true;
                 return result;
             }
-
+            
             var fightResult = _activeCharacter.FightComponent.Process(key);
 
             if (fightResult.TurnEnd || _activeCharacter?.Stats.ActionPoints == 0)
@@ -126,6 +126,7 @@ namespace ConsoleRpg_2.Screens
             ConsoleEx.Write("HP | ", ConsoleColor.White);
             ConsoleEx.WriteLine($"{_player.Stats.Health}/{_player.Stats.MaxHealth}", hpColor);
         }
+        
         private void RenderMp() 
         { 
             ConsoleEx.Write("MP | ", ConsoleColor.White);
@@ -134,6 +135,7 @@ namespace ConsoleRpg_2.Screens
                 _player.Stats.Mana <= 0 ? ConsoleColor.Gray : ConsoleColor.Cyan
             );
         }
+        
         private void RenderAp() 
         { 
             var usedActionPoints = _player.Stats.MaxActionPoints - _player.Stats.ActionPoints;
