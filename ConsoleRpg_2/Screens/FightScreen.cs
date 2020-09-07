@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ConsoleRpg_2.Configurations;
+using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.Extensions;
 using ConsoleRpg_2.GameObjects.Characters;
 using ConsoleRpg_2.Ui;
@@ -28,8 +29,11 @@ namespace ConsoleRpg_2.Screens
         
         public ScreenInputProcessResult ProcessInput(ConsoleKey key)
         {
-            var result = new ScreenInputProcessResult();
-            
+            var result = new ScreenInputProcessResult
+            {
+                RerenderFlag = true
+            };
+
             var prevChar = _activeCharacter;
             _activeCharacter = Fight.Queue.First();
 
@@ -39,21 +43,40 @@ namespace ConsoleRpg_2.Screens
 
                 Fight.BeginTurn(_activeCharacter);
                 
-                result.RerenderFlag = true;
                 return result;
             }
             
             var fightResult = _activeCharacter.FightComponent.Process(key);
-
-            if (fightResult.TurnEnd || _activeCharacter?.Stats.ActionPoints == 0)
+            
+            var fightUpdateResult = Fight.UpdateFight();
+            fightUpdateResult.DeadChars.ForEach(c =>
             {
-                Fight.EndCurrentTurn();
-                _activeCharacter = null;
-                result.RerenderFlag = true;
-                return result;
+                _gameLog.WriteLine($"{c.Name} died.");
+            });
+
+            if (fightUpdateResult.IsOver)
+            {
+                result.SwitchState = GameState.World;
+                Fight.Characters
+                    .Where(c => !c.Stats.IsDead)
+                    .ForEach(c =>
+                    {
+                        c.Stats.Health = c.Stats.MaxHealth;
+                        c.Stats.Mana = c.Stats.MaxMana;
+                        c.Stats.ActionPoints = c.Stats.MaxActionPoints;
+                    });
+            }
+            else
+            { 
+                if (fightResult.TurnEnd || _activeCharacter?.Stats.ActionPoints == 0)
+                {
+                    Fight.EndCurrentTurn();
+                    _activeCharacter = null;
+                    result.RerenderFlag = true;
+                    return result;
+                }
             }
             
-            result.RerenderFlag = true;
             return result;
         }
         

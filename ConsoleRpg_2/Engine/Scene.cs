@@ -58,7 +58,7 @@ namespace ConsoleRpg_2.Engine
         {
             var characters = new List<Character>();
             
-            characters.AddRange(Characters.Where(c => c.Dialogue != null));
+            characters.AddRange(Characters.Where(c => c.Dialogue != null && ! c.Stats.IsDead));
 
             return characters;
         }

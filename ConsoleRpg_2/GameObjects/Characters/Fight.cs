@@ -7,7 +7,7 @@ namespace ConsoleRpg_2.GameObjects.Characters
     public class Fight
     {
         private readonly Random _random = new Random();
-        private List<Character> Characters { get; set; }
+        public List<Character> Characters { get; set; }
 
         private const int queueSize = 10;
         public List<Character> Queue { get; set; } = new List<Character>();
@@ -71,9 +71,20 @@ namespace ConsoleRpg_2.GameObjects.Characters
             UpdateQueue();
         }
         
-        public void Tick()
+        public FightUpdateResult UpdateFight()
         {
-            
+            var deadChars = Characters.Where(c => c.Stats.IsDead).ToList();
+
+            foreach (var deadChar in deadChars)
+            {
+                Queue.Remove(deadChar);
+            }
+
+            return new FightUpdateResult
+            {
+                DeadChars = deadChars,
+                IsOver = deadChars.Any() // DEV
+            };
         }
 
         public void BeginTurn(Character activeCharacter)
@@ -145,5 +156,11 @@ namespace ConsoleRpg_2.GameObjects.Characters
                 }
             }
         }
+    }
+
+    public class FightUpdateResult
+    {
+        public List<Character> DeadChars { get; set; }
+        public bool IsOver { get; set; }
     }
 }

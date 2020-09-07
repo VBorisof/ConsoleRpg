@@ -6,7 +6,7 @@
     <Level>1</Level>
     <Race>Orc</Race>
     <Gender>Male</Gender>
-    <MaxHealth>400</MaxHealth>
+    <MaxHealth>15</MaxHealth>
     <MaxMana>50</MaxMana>
     <MaxActionPoints>6</MaxActionPoints>
     <Strength>8</Strength>

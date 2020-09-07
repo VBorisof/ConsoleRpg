@@ -146,7 +146,14 @@ namespace ConsoleRpg_2.GameObjects.Characters
 
             if (Stats.Perception > 3)
             {
-                result.Response += $"\n{LexicalHelper.GenderPronoun(character.Stats.Gender)} seems to be {character.CurrentAction}.";
+                if (character.Stats.IsDead)
+                {
+                    result.Response += $"\n{LexicalHelper.GenderPronoun(character.Stats.Gender)} seems to be dead.";
+                }
+                else
+                {
+                    result.Response += $"\n{LexicalHelper.GenderPronoun(character.Stats.Gender)} seems to be {character.CurrentAction}.";
+                }
             }
             
             return result;
