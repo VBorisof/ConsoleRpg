@@ -5,6 +5,7 @@
         World,
         Fight,
         Inventory,
-        Stats
+        Stats,
+        GameOver
     }
 }

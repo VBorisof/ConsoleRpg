@@ -277,14 +277,16 @@ namespace ConsoleRpg_2.Screens
                     break;
                 
                 case KeyMapping.HotBar_10:
-                    if (_currentCharacter.HotBar.Slot10.IsOccupied)
-                    {
-                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot10;
-                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
-                        
-                        _screenState = GameScreenState.HotBarUse;
-                        result.RerenderFlag = true;
-                    }
+                    result.SwitchState = GameState.Fight;
+                    result.RerenderFlag = true;
+//                    if (_currentCharacter.HotBar.Slot10.IsOccupied)
+//                    {
+//                        _currentCharacter.HotBar.SelectedSlot = _currentCharacter.HotBar.Slot10;
+//                        _currentCharacter.HotBar.SelectedSlot.UpdateCharacterSelectList(_currentCharacter);
+//                        
+//                        _screenState = GameScreenState.HotBarUse;
+//                        result.RerenderFlag = true;
+//                    }
                     break;
             }
 

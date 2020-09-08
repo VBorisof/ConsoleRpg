@@ -382,6 +382,7 @@ namespace ConsoleRpg_2.Helpers
             return "It";
         }
 
+
         public static string GetHealthString(int health, int maxHealth, LexicalVerbosity verbosity)
         {
             var percent = health / (float) maxHealth;
@@ -511,13 +512,33 @@ namespace ConsoleRpg_2.Helpers
 
             return "Dead";
         }
-    }
+               
+        public static string GetVictoryString()
+        {
+            var variants = new[]
+            {
+                "You crushed your enemies.",
+                "You gain victory in this battle.",
+                "The battle is over. You are victorious.",
+                "Your enemies are defeated.",
+                "You are the victor."
+            };
 
-    public enum LexicalVerbosity
-    {
-        Poor,
-        Normal,
-        High,
-        VeryHigh
+            return variants.ElementAt(Random.Next(0, variants.Count()));
+        }
+        
+        public static string GetDefeatString()
+        {
+            var variants = new[]
+            {
+                "Never again shall you set foot on this soil.",
+                "You have perished.",
+                "Your travels are over all too quick.",
+                "Death has claimed you.",
+                "You draw one last breath. Suddenly, all is still."
+            };
+
+            return variants.ElementAt(Random.Next(0, variants.Count()));
+        }
     }
 }

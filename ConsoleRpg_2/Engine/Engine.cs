@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.GameObjects.Characters;
 using ConsoleRpg_2.GameObjects.Characters.FightComponent;
@@ -34,10 +36,10 @@ namespace ConsoleRpg_2.Engine
                     Level = 1,
                     Race = Race.Human,
                     Gender = Gender.Male,
-                    Health = 150,
+                    Health = 30,
                     Mana = 50,
                     ActionPoints = 12,
-                    MaxHealth = 150,
+                    MaxHealth = 30,
                     MaxMana = 50,
                     MaxActionPoints = 12,
                     AvailableBaseSkillPoints = 50,
@@ -60,16 +62,16 @@ namespace ConsoleRpg_2.Engine
             
             scene.InitializeScene();
             
-            _currentState = GameState.Fight;
+            _currentState = GameState.World;
             
             _gameScreen = new GameScreen(_gameLog, _currentCharacter);
             _statScreen = new StatScreen(_currentCharacter);
-            _fightScreen = new FightScreen(new Fight(scene.Characters), _gameLog, _currentCharacter);
         }
         
         public void Run()
         {
             ConsoleKeyInfo key;
+            bool isRunning = true;
             bool rerenderFlag = true;
             do
             {
@@ -87,6 +89,11 @@ namespace ConsoleRpg_2.Engine
                             break;
                         case GameState.Fight:
                             _fightScreen.Render();
+                            break;
+                        case GameState.GameOver:
+                            Console.Clear();
+                            _gameLog.Render();
+                            Console.WriteLine("Press any key to exit.");
                             break;
                     }
 
@@ -113,6 +120,21 @@ namespace ConsoleRpg_2.Engine
                         if (processResult.SwitchState != null)
                         {
                             _currentState = processResult.SwitchState.Value;
+                        }
+                        if (_currentState == GameState.Fight)
+                        {
+                            var fightChars = new List<FightCharacter>
+                            {
+                                new FightCharacter(_currentCharacter, FightCharacterFaction.Player)
+                            };
+                            
+                            fightChars.AddRange(
+                                _currentCharacter.CurrentScene.Characters
+                                    .Except(new [] {_currentCharacter})
+                                .Select(c => new FightCharacter(c, FightCharacterFaction.Enemy))
+                            );
+                            
+                            _fightScreen = new FightScreen(new Fight(fightChars), _gameLog, _currentCharacter);
                         }
                         break;
                     }
@@ -142,10 +164,15 @@ namespace ConsoleRpg_2.Engine
                         }
                         break;
                     }
+                    
+                    case GameState.GameOver:
+                    {
+                        isRunning = false;
+                        break;
+                    }
                 }
-                
             } 
-            while (key.Key != KeyMapping.ExitGame);
+            while (key.Key != KeyMapping.ExitGame && isRunning);
             
             Console.Clear();
             Console.WriteLine("You have left the game.");

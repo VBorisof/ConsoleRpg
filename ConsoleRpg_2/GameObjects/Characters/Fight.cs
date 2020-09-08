@@ -1,64 +1,76 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConsoleRpg_2.Extensions;
 
 namespace ConsoleRpg_2.GameObjects.Characters
 {
+    public enum FightCharacterFaction
+    {
+        Player,
+        Ally,
+        Enemy
+    }
+    
+    public class FightCharacter
+    {
+        public Character Character { get; set; }
+        public FightCharacterFaction Faction { get; set; }
+        public double QueueProbability { get; }
+
+        public FightCharacter(Character character, FightCharacterFaction faction)
+        {
+            Character = character;
+            Faction = faction;
+
+            QueueProbability = 1f;
+            if (Character.Stats.Agility < 8)
+            {
+                QueueProbability = 0.9f;
+            }
+            if (Character.Stats.Agility < 6)
+            {
+                QueueProbability = 0.8f;
+            }
+            if (Character.Stats.Agility < 5)
+            {
+                QueueProbability = 0.5f;
+            }
+            if (Character.Stats.Agility < 2)
+            {
+                QueueProbability = 0.3f;
+            }
+        }
+    }
+    
     public class Fight
     {
         private readonly Random _random = new Random();
-        public List<Character> Characters { get; set; }
+        
+        public List<FightCharacter> FightCharacters { get; set; }
 
-        private const int queueSize = 10;
-        public List<Character> Queue { get; set; } = new List<Character>();
+        private const int QueueSize = 10;
+        public List<FightCharacter> Queue { get; set; } = new List<FightCharacter>();
 
-        public Fight(List<Character> characters)
+        
+        public Fight(List<FightCharacter> fightCharacters)
         {
-            Characters = characters;
+            FightCharacters = fightCharacters;
             UpdateQueue();
         }
 
         private void UpdateQueue()
         {
-            var queueProbabilities = Characters.Select(c =>
-                {
-                    double probability = 1.0;
-                    if (c.Stats.Agility < 8)
-                    {
-                        probability = 0.9f;
-                    }
-                    if (c.Stats.Agility < 6)
-                    {
-                        probability = 0.8f;
-                    }
-                    if (c.Stats.Agility < 5)
-                    {
-                        probability = 0.5f;
-                    }
-                    if (c.Stats.Agility < 2)
-                    {
-                        probability = 0.3f;
-                    }
-
-                    return new
-                    {
-                        Character = c,
-                        Probability = probability
-                    };
-                })
-                .ToList();
-
-            for (int i = 0; i < queueSize - Queue.Count; ++i)
+            for (int i = 0; i < QueueSize - Queue.Count; ++i)
             {
-                Character toPut = null;
+                FightCharacter toPut = null;
                 while (toPut == null)
                 {
-                    var eligibleChars = queueProbabilities
-                        .Where(qp => _random.NextDouble() < qp.Probability)
+                    var eligibleChars = FightCharacters
+                        .Where(qp => _random.NextDouble() < qp.QueueProbability)
                         .ToList();
 
-                    toPut = eligibleChars.ElementAtOrDefault(_random.Next(0, eligibleChars.Count))
-                        ?.Character;
+                    toPut = eligibleChars.ElementAtOrDefault(_random.Next(0, eligibleChars.Count));
                 }
                 
                 Queue.Add(toPut);
@@ -73,17 +85,30 @@ namespace ConsoleRpg_2.GameObjects.Characters
         
         public FightUpdateResult UpdateFight()
         {
-            var deadChars = Characters.Where(c => c.Stats.IsDead).ToList();
+            var deadChars = FightCharacters.Where(c => c.Character.Stats.IsDead).ToList();
 
             foreach (var deadChar in deadChars)
             {
                 Queue.Remove(deadChar);
             }
 
+            FightOutcome? fightOutcome = null;
+            
+            var aliveChars = FightCharacters.Where(c => !c.Character.Stats.IsDead).ToList();
+
+            if (aliveChars.All(c => c.Faction == FightCharacterFaction.Enemy))
+            {
+                fightOutcome = FightOutcome.PlayerLose;
+            }
+            if (aliveChars.All(c => c.Faction == FightCharacterFaction.Ally || c.Faction == FightCharacterFaction.Player))
+            {
+                fightOutcome = FightOutcome.PlayerWin;
+            }
+            
             return new FightUpdateResult
             {
                 DeadChars = deadChars,
-                IsOver = deadChars.Any() // DEV
+                FightOutcome = fightOutcome
             };
         }
 
@@ -156,11 +181,29 @@ namespace ConsoleRpg_2.GameObjects.Characters
                 }
             }
         }
+
+        public void PostFight()
+        {
+            FightCharacters
+                .Where(c => !c.Character.Stats.IsDead)
+                .ForEach(c =>
+                {
+                    c.Character.Stats.Health = c.Character.Stats.MaxHealth;
+                    c.Character.Stats.Mana = c.Character.Stats.MaxMana;
+                    c.Character.Stats.ActionPoints = c.Character.Stats.MaxActionPoints;
+                });
+        }
     }
 
+    public enum FightOutcome
+    {
+        PlayerWin,
+        PlayerLose
+    }
+    
     public class FightUpdateResult
     {
-        public List<Character> DeadChars { get; set; }
-        public bool IsOver { get; set; }
+        public List<FightCharacter> DeadChars { get; set; }
+        public FightOutcome? FightOutcome { get; set; }
     }
 }

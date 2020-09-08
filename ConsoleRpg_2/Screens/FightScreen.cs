@@ -4,6 +4,7 @@ using ConsoleRpg_2.Configurations;
 using ConsoleRpg_2.Engine;
 using ConsoleRpg_2.Extensions;
 using ConsoleRpg_2.GameObjects.Characters;
+using ConsoleRpg_2.Helpers;
 using ConsoleRpg_2.Ui;
 
 namespace ConsoleRpg_2.Screens
@@ -35,7 +36,7 @@ namespace ConsoleRpg_2.Screens
             };
 
             var prevChar = _activeCharacter;
-            _activeCharacter = Fight.Queue.First();
+            _activeCharacter = Fight.Queue.First().Character;
 
             if (prevChar != _activeCharacter)
             {
@@ -51,30 +52,35 @@ namespace ConsoleRpg_2.Screens
             var fightUpdateResult = Fight.UpdateFight();
             fightUpdateResult.DeadChars.ForEach(c =>
             {
-                _gameLog.WriteLine($"{c.Name} died.");
+                _gameLog.WriteLine($"{c.Character.Name} ({c.Faction}) died.");
             });
 
-            if (fightUpdateResult.IsOver)
+            switch (fightUpdateResult.FightOutcome)
             {
-                result.SwitchState = GameState.World;
-                Fight.Characters
-                    .Where(c => !c.Stats.IsDead)
-                    .ForEach(c =>
-                    {
-                        c.Stats.Health = c.Stats.MaxHealth;
-                        c.Stats.Mana = c.Stats.MaxMana;
-                        c.Stats.ActionPoints = c.Stats.MaxActionPoints;
-                    });
+                case FightOutcome.PlayerWin:
+                    _gameLog.WriteLine("");
+                    _gameLog.WriteLine(LexicalHelper.GetVictoryString());
+                    _gameLog.WriteLine("");
+                
+                    result.SwitchState = GameState.World;
+                    Fight.PostFight();
+                    break;
+                
+                case FightOutcome.PlayerLose:
+                    _gameLog.WriteLine("");
+                    _gameLog.WriteLine(LexicalHelper.GetDefeatString());
+                    _gameLog.WriteLine("");
+                    
+                    result.SwitchState = GameState.GameOver;
+                    break;
             }
-            else
-            { 
-                if (fightResult.TurnEnd || _activeCharacter?.Stats.ActionPoints == 0)
-                {
-                    Fight.EndCurrentTurn();
-                    _activeCharacter = null;
-                    result.RerenderFlag = true;
-                    return result;
-                }
+            
+            if (fightResult.TurnEnd || _activeCharacter?.Stats.ActionPoints == 0)
+            {
+                Fight.EndCurrentTurn();
+                _activeCharacter = null;
+                result.RerenderFlag = true;
+                return result;
             }
             
             return result;
@@ -110,11 +116,11 @@ namespace ConsoleRpg_2.Screens
                 .PadRight(Configuration.BufferLength, '='));
 
 
-            ConsoleEx.Write(Fight.Queue.First().Name, ConsoleColor.Green);
+            ConsoleEx.Write(Fight.Queue.First().Character.Name, ConsoleColor.Cyan);
             ConsoleEx.Write(" > ", ConsoleColor.White);
 
-            var restOfChars = string.Join(" > ", Fight.Queue.Skip(1).Select(c => c.Name));
-            var allowedLength = Configuration.BufferLength - (Fight.Queue.First().Name.Length + " > ".Length);
+            var restOfChars = string.Join(" > ", Fight.Queue.Skip(1).Select(c => c.Character.Name));
+            var allowedLength = Configuration.BufferLength - (Fight.Queue.First().Character.Name.Length + " > ".Length);
             
             ConsoleEx.Write(string.Join("", restOfChars.Take(allowedLength)), ConsoleColor.Gray);
             
